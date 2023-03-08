@@ -14,11 +14,11 @@ module.exports = {
         ecmaVersion: "latest"
     },
     rules: {
-      "prettier/prettier": [
-        "warn",
-        {
-          ...prettierRC,
-        }
-      ]
+        "prettier/prettier": [
+            "warn",
+            {
+                ...prettierRC
+            }
+        ]
     }
 };
