@@ -1,10 +1,14 @@
 <template>
     <div class="container mx-auto">
         <header>
-            <nav class="w-full">
-                <div class="logo">
-                    <img src="src\assets\logobackstagemaps.svg" />
-                    <span>Backstagemaps</span>
+            <nav class="w-full shadow-lg">
+                <div class="flex justify-center items-center h-16">
+                    <div class="relative w-16 space-x-20 mt-3">
+                        <img src="src\assets\logobackstagemaps.svg" class="absolute z-10" />
+                        <span class="relative z-20 text-4xl font-bold text-white"
+                            >Backstagemaps</span
+                        >
+                    </div>
                 </div>
             </nav>
         </header>
@@ -19,30 +23,4 @@ export default {
 };
 </script>
 
-<style>
-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    top: 25px;
-    color: #fff;
-}
-
-.logo {
-    position: relative;
-    width: 60px;
-}
-
-.logo img {
-    position: absolute;
-    z-index: 1;
-}
-
-.logo span {
-    position: relative;
-    z-index: 2;
-    margin-left: 70px;
-    font-size: 30px;
-}
-</style>
+<style></style>
