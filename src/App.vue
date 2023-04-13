@@ -1,25 +1,16 @@
 <template>
     <header>
-        <router-link to="/" class="mr-4">
-            <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-        </router-link>
+        <nav>
+            <div class="grid-cols-12">
+                <div class="relative w-16 space-x-20 mt-3">
+                    <img src="src\assets\logobackstagemaps.svg" class="absolute z-10" />
+                    <h1 class="relative z-20 text-4xl font-bold">Backstagemaps</h1>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <main>
-        <!--        <router-view />-->
-        <LandingPage />
+        <router-view />
     </main>
 </template>
-
-<script>
-import LandingPage from "./components/Landingspage.vue";
-
-export default {
-    name: "App",
-    components: {
-        LandingPage
-    }
-};
-</script>
-
-<style></style>
