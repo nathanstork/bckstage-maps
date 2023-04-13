@@ -1,44 +1,25 @@
-<script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-import TheWelcome from "./components/TheWelcome.vue";
-</script>
-
 <template>
     <header>
         <router-link to="/" class="mr-4">
             <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
         </router-link>
-
-        <div class="wrapper">
-            <HelloWorld msg="You did it!" />
-        </div>
     </header>
 
     <main>
-        <router-view />
+        <!--        <router-view />-->
+        <LandingPage />
     </main>
 </template>
 
-<style scoped>
-header {
-    line-height: 1.5;
-}
+<script>
+import LandingPage from "./components/Landingspage.vue";
 
-.logo {
-    display: block;
-}
-
-@media (min-width: 1024px) {
-    header {
-        display: flex;
-        place-items: center;
-        padding-right: calc(var(--section-gap) / 2);
+export default {
+    name: "App",
+    components: {
+        LandingPage
     }
+};
+</script>
 
-    header .wrapper {
-        display: flex;
-        place-items: flex-start;
-        flex-wrap: wrap;
-    }
-}
-</style>
+<style></style>
