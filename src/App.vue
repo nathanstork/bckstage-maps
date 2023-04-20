@@ -7,10 +7,7 @@
         <nav class="container text-center">
             <div class="row">
                 <div class="col-1">
-                    <i
-                        class="fa fa-cog"
-                        style="font-size: 40px; color: #0096ff; margin-top: 15px"
-                    ></i>
+                    <CogIcon />
                 </div>
                 <div class="col-10 d-flex align-items-center justify-content-center">
                     <img
@@ -26,3 +23,12 @@
         <router-view />
     </main>
 </template>
+<script>
+import CogIcon from "./components/Gearsettings.vue";
+
+export default {
+    components: {
+        CogIcon
+    }
+};
+</script>
