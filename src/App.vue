@@ -16,6 +16,9 @@
                     />
                     <h1 style="margin-left: 20px; margin-top: 10px">Backstagemaps</h1>
                 </div>
+                <div class="col-1">
+                    <PSlusIcon />
+                </div>
             </div>
         </nav>
     </header>
@@ -25,10 +28,12 @@
 </template>
 <script>
 import CogIcon from "./components/Gearsettings.vue";
+import PSlusIcon from "./components/plussettings.vue";
 
 export default {
     components: {
-        CogIcon
+        CogIcon,
+        PSlusIcon
     }
 };
 </script>
