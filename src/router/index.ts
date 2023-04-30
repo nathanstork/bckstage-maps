@@ -1,7 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
-import SignIn from "@/views/SignIn.vue";
+import SignedIn from "@/views/SignedIn.vue";
 import NotFound from "@/views/NotFound.vue";
+import store from "@/store";
+
+const checks = {
+    isLoggedIn: function () {
+        return store.state.user !== null;
+    }
+};
 
 const routes = [
     {
@@ -10,14 +17,33 @@ const routes = [
         component: Home,
         meta: {
             title: "Home"
+        },
+        beforeEnter: async (
+            to: any,
+            from: any,
+            next: (arg0: { name: string } | undefined) => void
+        ) => {
+            if (checks.isLoggedIn()) {
+                next({ name: "SignedIn" });
+            }
+            // @ts-ignore
+            next();
         }
     },
     {
-        path: "/sign-in",
-        name: "SignIn",
-        component: SignIn,
+        path: "/signed-in",
+        name: "SignedIn",
+        component: SignedIn,
         meta: {
-            title: "Sign In"
+            title: "Signed In"
+        },
+        beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {
+            console.log(store.state.user);
+            if (!checks.isLoggedIn()) {
+                next({ name: "Home" });
+            }
+            // @ts-ignore
+            next();
         }
     },
     {
