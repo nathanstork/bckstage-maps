@@ -2,15 +2,34 @@
     <div class="objectzone">
         <div class="table-container">
             <div>
-                <input v-model="filterText" type="text" placeholder="Filter by name..." />
+                <input
+                    style="width: 120px"
+                    v-model="filterText"
+                    type="text"
+                    placeholder="Filter by name..."
+                />
             </div>
             <table>
                 <thead>
                     <tr class="text-center">
                         <th class="border-2 p-2 text-center">
-                            <button @click="toggleMenu('object')">Objects [+]</button>
+                            <button class="objectbutton" @click="toggleMenu('object')">
+                                Objects [+]
+                            </button>
                             <div v-if="showMenu === 'object'">
                                 <label></label>
+                                <br />
+                                <label>
+                                    <input
+                                        class="border-2 p-1 text-center"
+                                        style="width: 80px"
+                                        type="text"
+                                        placeholder="Object..."
+                                        v-model="newObject.object"
+                                        @keyup.enter="addItem"
+                                        @keyup="updatedBackgroundColor"
+                                    />
+                                </label>
                                 <br />
                                 <select
                                     class="button1"
@@ -28,18 +47,6 @@
                                     </option>
                                 </select>
                                 <br />
-                                <label>
-                                    <input
-                                        class="border-2 p-1 text-center"
-                                        style="width: 80px"
-                                        type="text"
-                                        placeholder="Object..."
-                                        v-model="newObject.object"
-                                        @keyup.enter="addItem"
-                                        @keyup="updatedBackgroundColor"
-                                    />
-                                </label>
-                                <br />
                                 <br />
                                 <label
                                     :style="{
@@ -49,6 +56,8 @@
                                     }"
                                     >{{ newObject.object }}</label
                                 >
+                                <br />
+                                <button @click="addItem">Add</button>
                             </div>
                         </th>
                         <th class="border-2 p-2 text-center">
@@ -101,6 +110,10 @@
     height: 550px;
     width: 255px;
     overflow-y: scroll;
+}
+
+.objectbutton {
+    margin-bottom: -20px;
 }
 
 .button1 {
@@ -188,7 +201,9 @@ export default {
             }
             this.newObject.object = "";
             this.newObject.color = "";
+            this.showMenu = null;
         },
+
         deleteItem(index, event) {
             event.preventDefault();
             if (event.button === 2) {
