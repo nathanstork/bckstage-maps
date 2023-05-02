@@ -23,17 +23,24 @@
         </nav>
     </header>
     <main>
+        <div
+            class="objectform col-2 align-items-right"
+            style="float: right; margin-right: 20px; margin-top: 20px"
+        >
+            <EasyAdd></EasyAdd>
+        </div>
         <router-view />
     </main>
 </template>
 <script>
 import CogIcon from "./components/Gearsettings.vue";
 import PSlusIcon from "./components/plussettings.vue";
-
+import EasyAdd from "./components/EasyAdd.vue";
 export default {
     components: {
         CogIcon,
-        PSlusIcon
+        PSlusIcon,
+        EasyAdd
     }
 };
 </script>
