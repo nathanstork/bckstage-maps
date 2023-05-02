@@ -26,14 +26,24 @@
         <router-view />
     </main>
 </template>
+
 <script>
+import { supabase } from "@/lib/supabaseClient";
+import { onMounted } from "vue";
 import CogIcon from "./components/Gearsettings.vue";
 import PSlusIcon from "./components/plussettings.vue";
+import store from "@/store";
 
 export default {
     components: {
         CogIcon,
         PSlusIcon
+    },
+    setup() {
+        onMounted(async () => {
+            const { data, error } = await supabase.auth.refreshSession();
+            store.commit("setUser", data.user);
+        });
     }
 };
 </script>
