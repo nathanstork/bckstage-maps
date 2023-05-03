@@ -25,7 +25,7 @@
     cursor: pointer;
     font-size: 20px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .orange-button {
@@ -46,7 +46,6 @@
 .custom-button {
     background-color: #00ff77;
     color: black;
-    margin-top: 30px;
 }
 </style>
 
