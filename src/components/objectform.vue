@@ -2,12 +2,7 @@
     <div class="objectzone">
         <div class="table-container">
             <div>
-                <input
-                    style="width: 120px"
-                    v-model="filterText"
-                    type="text"
-                    placeholder="Filter by name..."
-                />
+                <input style="width: 120px" v-model="filterText" type="text" placeholder="Filter by name..." />
             </div>
             <table>
                 <thead>
@@ -20,42 +15,24 @@
                                 <label></label>
                                 <br />
                                 <label>
-                                    <input
-                                        class="border-2 p-1 text-center"
-                                        style="width: 80px"
-                                        type="text"
-                                        placeholder="Object..."
-                                        v-model="newObject.object"
-                                        @keyup.enter="addItem"
-                                        @keyup="updatedBackgroundColor"
-                                    />
+                                    <input class="border-2 p-1 text-center" style="width: 80px" type="text"
+                                        placeholder="Object..." v-model="newObject.object" @keyup.enter="addItem"
+                                        @keyup="updatedBackgroundColor" />
                                 </label>
                                 <br />
-                                <select
-                                    class="button1"
-                                    s
-                                    v-model="newObject.color"
-                                    @change="updateColor"
-                                >
+                                <select class="button1" s v-model="newObject.color" @change="updateColor">
                                     <option value="">Choose Label</option>
-                                    <option
-                                        v-for="(color, index) in colorList"
-                                        :value="color.value"
-                                        :key="index"
-                                    >
+                                    <option v-for="(color, index) in colorList" :value="color.value" :key="index">
                                         {{ color.name }}
                                     </option>
                                 </select>
                                 <br />
                                 <br />
-                                <label
-                                    :style="{
+                                <label :style="{
                                         backgroundColor: newObject.color,
                                         color: 'black',
                                         padding: '5px'
-                                    }"
-                                    >{{ newObject.object }}</label
-                                >
+                                    }">{{ newObject.object }}</label>
                                 <br />
                                 <button @click="addItem">Add</button>
                             </div>
@@ -67,35 +44,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="(item, index) in filteredItems"
-                        :key="index"
-                        :style="{ backgroundColor: item.color }"
-                        class="text-center"
-                        @contextmenu.prevent="deleteItem(index, $event)"
-                        draggable="true"
-                        @dragstart="dragStart($event, index)"
-                        @dragover="dragOver($event)"
-                        @drop="drop($event, index)"
-                    >
+                    <tr v-for="(item, index) in filteredItems" :key="index" :style="{ backgroundColor: item.color }"
+                        class="text-center" @contextmenu.prevent="deleteItem(index, $event)" draggable="true"
+                        @dragstart="dragStart($event, index)" @dragover="dragOver($event)" @drop="drop($event, index)">
                         <td class="border-2 p-2 text-center">
-                            <input
-                                type="text"
-                                v-model="item.object"
-                                :style="{ backgroundColor: item.color }"
-                                style="width: 100px"
-                                @blur="updateItem(index, 'object')"
-                                class="text-center"
-                            />
+                            <input type="text" v-model="item.object" :style="{ backgroundColor: item.color }"
+                                style="width: 100px" @blur="updateItem(index, 'object')" class="text-center" />
                         </td>
                         <td class="border-2 p-2 text-center">
-                            <input
-                                type="text"
-                                v-model="item.zone"
-                                @blur="updateItem(index, 'zone')"
-                                class="text-center"
-                                style="width: 100px"
-                            />
+                            <input type="text" v-model="item.zone" @blur="updateItem(index, 'zone')" class="text-center"
+                                style="width: 100px" />
                         </td>
                     </tr>
                 </tbody>
@@ -107,7 +65,7 @@
 <style>
 .table-container {
     position: relative;
-    height: 550px;
+    height: 360px;
     width: 255px;
     overflow-y: scroll;
 }
