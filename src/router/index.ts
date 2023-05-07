@@ -23,7 +23,7 @@ const routes = [
     {
         path: "/event/:id",
         name: "Event",
-        component: () => import("../views/Event.vue"), // Lazy load the view
+        component: () => import("../views/EventView.vue"), // Lazy load the view
         meta: {
             title: "Event"
         },
