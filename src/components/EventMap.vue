@@ -1,52 +1,41 @@
 <script>
-const panZoomOptions = {
-    minZoom: 0.5,
-    maxZoom: 5
-};
+import * as Panzoom from "panzoom";
 
 export default {
     name: "eventMap",
-    props: {
-        options: {
-            type: Object,
-            default: () => panZoomOptions
-        }
-    },
-    methods: {
-        onPanStart(e) {
-            console.log(e);
-        },
-        onInit(panzoomInstance, id) {
-            panzoomInstance.on("panstart", function (e) {
-                console.log(e);
+    props: {},
+    methods: {},
+    mounted() {
+        this.$nextTick(() => {
+            this.panzoom = Panzoom(this.$refs.panzoomImage, {
+                autocenter: true,
+                initialZoom: 0.5,
+                zoomSpeed: 0.065,
+                minZoom: 0.25,
+                maxZoom: 3,
+                bounds: true,
+                boundsPadding: 0.1
             });
-        }
+        });
     }
 };
 </script>
 
 <template>
-    <div id="panzoomContainer" style="width: 100vw; height: 500px; overflow: hidden">
-        <!--        <img src="./../assets/tiger.svg" width="450" height="450" />-->
-        <div>
-            <panZoom
-                selector=".zoomable"
-                id="panzoomContainer"
-                :options="options"
-                @init="onInit"
-                @panstart="onPanStart"
-            >
-                <div class="zoomable">
-                    <img src="https://wouwlite.nl/assets/img/photos/bckstagecp-promo-splash.png" />
-                </div>
-                <div class="not-zoomable others">I am not zoomable</div>
-            </panZoom>
-        </div>
+    <div id="panzoomContainer">
+        <img
+            ref="panzoomImage"
+            src="https://wouwlite.nl/assets/img/photos/bckstagecp-promo-splash.png"
+            alt="BckstageCP image"
+        />
     </div>
 </template>
 
 <style>
 #panzoomContainer {
+    width: 100vw;
+    height: 500px;
     background-color: #8e9ec9;
+    overflow: hidden;
 }
 </style>
