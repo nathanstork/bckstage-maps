@@ -1,10 +1,30 @@
 <script>
 import * as Panzoom from "panzoom";
+import { VuePDF, usePDF } from "@tato30/vue-pdf";
+import { ref } from "vue";
 
 export default {
     name: "eventMap",
     props: {},
-    methods: {},
+    components: {
+        VuePDF
+    },
+    methods: {
+        pdfLoaded() {
+            console.log("PDF has loaded");
+
+            //this.panzoom.moveTo(0, 0);
+        }
+    },
+    setup() {
+        const { pdf } = usePDF(
+            "https://gudxawknwihalccacopu.supabase.co/storage/v1/object/public/maps/HJ2019%20terreintekening%20versie1.9%20all%20.pdf"
+        );
+        const rotation = ref(-90);
+        const scale = ref(2);
+
+        return { pdf, rotation, scale };
+    },
     mounted() {
         this.$nextTick(() => {
             this.panzoom = Panzoom(this.$refs.panzoomImage, {
@@ -23,11 +43,16 @@ export default {
 
 <template>
     <div id="panzoomContainer">
-        <img
-            ref="panzoomImage"
-            src="https://wouwlite.nl/assets/img/photos/bckstagecp-promo-splash.png"
-            alt="BckstageCP image"
-        />
+        <div ref="panzoomImage">
+            <VuePDF
+                :pdf="pdf"
+                :page="1"
+                :rotation="rotation"
+                :scale="scale"
+                :text-layer="false"
+                @loaded="pdfLoaded"
+            />
+        </div>
     </div>
 </template>
 
