@@ -16,10 +16,10 @@
         "**/*": "prettier --write --ignore-unknown"
     },
     "dependencies": {
-        "@panzoom/panzoom": "^4.5.1",
         "@supabase/supabase-js": "^2.19.0",
         "bootstrap": "^5.3.0-alpha3",
         "bootstrap-vue": "^2.23.1",
+        "panzoom": "^9.4.3",
         "postcss": "^8.4.21",
         "vue": "^3.2.47",
         "vue-router": "^4.1.6"
