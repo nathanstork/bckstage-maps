@@ -23,10 +23,7 @@
         </nav>
     </header>
     <main>
-        <div
-            class="objectform col-2 align-items-right"
-            style="float: right; margin-right: 20px; margin-top: 20px"
-        >
+        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">
             <objectzone></objectzone>
         </div>
         <router-view />

@@ -2,62 +2,122 @@
     <div class="objectzone">
         <div class="table-container">
             <div>
-                <input style="width: 120px" v-model="filterText" type="text" placeholder="Filter by name..." />
+                <input
+                    style="width: 171px"
+                    v-model="filterText"
+                    type="text"
+                    placeholder="Filter by name..."
+                />
             </div>
-            <table>
+            <table style="width: 80px">
                 <thead>
                     <tr class="text-center">
                         <th class="border-2 p-2 text-center">
-                            <button class="objectbutton" @click="toggleMenu('object')">
-                                Objects [+]
-                            </button>
-                            <div v-if="showMenu === 'object'">
-                                <label></label>
-                                <br />
-                                <label>
-                                    <input class="border-2 p-1 text-center" style="width: 80px" type="text"
-                                        placeholder="Object..." v-model="newObject.object" @keyup.enter="addItem"
-                                        @keyup="updatedBackgroundColor" />
-                                </label>
-                                <br />
-                                <select class="button1" s v-model="newObject.color" @change="updateColor">
-                                    <option value="">Choose Label</option>
-                                    <option v-for="(color, index) in colorList" :value="color.value" :key="index">
-                                        {{ color.name }}
-                                    </option>
-                                </select>
-                                <br />
-                                <br />
-                                <label :style="{
-                                        backgroundColor: newObject.color,
-                                        color: 'black',
-                                        padding: '5px'
-                                    }">{{ newObject.object }}</label>
-                                <br />
-                                <button @click="addItem">Add</button>
+                            <div class="objecttext">
+                                <h2>Objects</h2>
                             </div>
                         </th>
                         <th class="border-2 p-2 text-center">
-                            <button @click="toggleMenu('zone')">Zone</button>
-                            <div v-if="showMenu === 'zone'"></div>
+                            <div class="objecttext">
+                                <h2>Zone</h2>
+                            </div>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in filteredItems" :key="index" :style="{ backgroundColor: item.color }"
-                        class="text-center" @contextmenu.prevent="deleteItem(index, $event)" draggable="true"
-                        @dragstart="dragStart($event, index)" @dragover="dragOver($event)" @drop="drop($event, index)">
-                        <td class="border-2 p-2 text-center">
-                            <input type="text" v-model="item.object" :style="{ backgroundColor: item.color }"
-                                style="width: 100px" @blur="updateItem(index, 'object')" class="text-center" />
+                    <tr
+                        v-for="(item, itemIndex) in filteredItems.slice().reverse()"
+                        :key="itemIndex"
+                        :style="{ backgroundColor: item.color }"
+                        class="text-center"
+                        @contextmenu.prevent="deleteItem(itemIndex, $event)"
+                    >
+                        <td
+                            class="border-2 p-2 text-center"
+                            :style="{ backgroundColor: item.color }"
+                        >
+                            <input
+                                type="text"
+                                v-model="item.object"
+                                style="width: 84px"
+                                @blur="updateItem(itemIndex, 'object')"
+                                class="text-center"
+                            />
                         </td>
                         <td class="border-2 p-2 text-center">
-                            <input type="text" v-model="item.zone" @blur="updateItem(index, 'zone')" class="text-center"
-                                style="width: 100px" />
+                            <input
+                                type="text"
+                                v-model="item.zone"
+                                @blur="updateItem(itemIndex, 'zone')"
+                                class="text-center"
+                                style="width: 50px"
+                            />
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="buttons">
+            <button
+                class="orange-button"
+                @click="addItemWithColor('Ambu', '#FFA500', 'deleteAmbu')"
+            >
+                Ambu
+            </button>
+            <button class="purple-button" @click="addItemWithColor('ALS', '#FF00DF', 'deleteALS')">
+                ALS
+            </button>
+            <button class="blue-button" @click="addItemWithColor('IBT', '#00FFFF', 'deleteIBT')">
+                IBT
+            </button>
+            <button class="custom-button" @click="showCustomScreen = !showCustomScreen">
+                Custom [+]
+            </button>
+            <div
+                class="customscreen"
+                v-if="showCustomScreen"
+                ref="customscreen"
+                style="background-color: #00ff77; border: 3px solid black"
+            >
+                Object:<input
+                    class="border-2 p-1 text-center"
+                    :style="{ margin: '20px 15px 0', width: '100px', 'font-size': '16px' }"
+                    type="text"
+                    v-model="newObject.object"
+                />
+                Label:
+                <select
+                    class="button1"
+                    :style="{ margin: '10px 20px 0', width: '100px' }"
+                    s
+                    v-model="newObject.color"
+                    @change="updateColor"
+                >
+                    <option value="">Choose Label</option>
+                    <option v-for="(color, index) in colorList" :value="color.value" :key="index">
+                        {{ color.name }}
+                    </option>
+                </select>
+                <br />
+                <label
+                    :style="{
+                        backgroundColor: newObject.color,
+                        color: 'black',
+                        padding: '5px',
+                        width: '187px',
+                        margin: '30px auto 0',
+                        textAlign: 'center'
+                    }"
+                    >{{ newObject.object }}</label
+                >
+                <br />
+                <button
+                    :style="{ margin: '10px 43px 0', width: '100px' }"
+                    @click="addItemWithCustomColor"
+                >
+                    Add
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -66,16 +126,13 @@
 .table-container {
     position: relative;
     height: 360px;
-    width: 255px;
+    width: 188px;
     overflow-y: scroll;
+    margin-left: 30px;
 }
 
-.objectbutton {
-    margin-bottom: -20px;
-}
-
-.button1 {
-    font-size: 12px;
+.objecttext h2 {
+    font-size: 20px;
 }
 
 .newObject {
@@ -91,9 +148,58 @@ td {
     text-overflow: ellipsis;
 }
 
-th,
-td:hover {
-    width: 120%;
+.buttons {
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+/* Easy Add Section*/
+.buttons {
+    margin-top: 30px;
+}
+
+.orange-button,
+.purple-button,
+.blue-button,
+.custom-button {
+    width: 190px;
+    height: 40px;
+    margin-left: 10px;
+    border: solid 2px black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.orange-button {
+    background-color: orange;
+    color: black;
+}
+
+.purple-button {
+    background-color: #ff00df;
+    color: black;
+}
+
+.blue-button {
+    background-color: #00ffff;
+    color: black;
+}
+
+.custom-button {
+    background-color: #00ff77;
+    color: black;
+}
+
+.customscreen {
+    width: 190px;
+    height: 200px;
+    margin-left: 10px;
+    background-color: white;
+    color: black;
+    margin-top: -190px;
 }
 </style>
 
@@ -104,7 +210,8 @@ export default {
             showMenu: null,
             newObject: {
                 object: "",
-                color: ""
+                color: "",
+                popupNumber: ""
             },
             colorList: [
                 { name: "Blue", value: "#00FFFF" },
@@ -115,87 +222,65 @@ export default {
                 { name: "Red", value: "#FF0000" }
             ],
             items: Array.from({ length: 12 }, () => ({ object: "", zone: "", color: "" })),
-            filterText: ""
+
+            filterText: "",
+            popupVisible: false,
+            showCustomScreen: false,
+            popupInput: ""
         };
     },
-
     computed: {
         filteredItems() {
-            let filterText = this.filterText.toLowerCase().trim();
-            if (!filterText) {
-                return this.items;
-            }
             return this.items.filter(item => {
-                let objectMatches = item.object.toLowerCase().includes(filterText);
-                let colorMatches = item.color.toLowerCase().includes(filterText);
-                return objectMatches || colorMatches;
+                return item.object.toLowerCase().includes(this.filterText.toLowerCase());
             });
         }
     },
 
     methods: {
-        updateItem(index, field) {
-            console.log(`Item ${index} updated:`, this.items[index]);
-        },
-        toggleMenu(menu) {
-            if (this.showMenu === menu) {
-                this.showMenu = null;
-            } else {
-                this.showMenu = menu;
-            }
-        },
-
-        addItem() {
-            let emptySlotIndex = this.items.findIndex(item => item.object === "");
-            if (emptySlotIndex !== -1) {
-                this.items[emptySlotIndex].object = this.newObject.object;
-                this.items[emptySlotIndex].color = this.newObject.color;
-            } else {
-                this.items.push({
-                    object: this.newObject.object,
+        addItemWithColor(object, color, deleteName) {
+            const number = prompt("Please enter a number:");
+            if (number !== null) {
+                const item = {
+                    object: object + " " + number,
+                    color: color,
                     zone: "",
-                    color: this.newObject.color
-                });
+                    deleteName: deleteName
+                };
+                this.items.push(item);
             }
+        },
+        addItemWithCustomColor() {
+            this.filteredItems.push({
+                object: this.newObject.object,
+                zone: "",
+                color: this.newObject.color
+            });
             this.newObject.object = "";
             this.newObject.color = "";
-            this.showMenu = null;
+            this.showCustomScreen = false;
         },
 
-        deleteItem(index, event) {
+        deleteItem(itemIndex, event) {
             event.preventDefault();
-            if (event.button === 2) {
-                if (confirm("Are you sure you want to delete this item?")) {
-                    this.items.splice(index, 1);
+            const itemToDelete = this.filteredItems.slice().reverse()[itemIndex];
+            const deleteName = itemToDelete.deleteName;
+            const indexToDelete = this.items.findIndex(item => item.deleteName === deleteName);
+            if (indexToDelete >= 0) {
+                if (confirm(`Are you sure you want to delete "${deleteName}"?`)) {
+                    this.items.splice(indexToDelete, 1);
                 }
             }
         },
-        dragStart(event, index) {
-            event.dataTransfer.setData("text/plain", index);
+
+        updateItem(index, key) {
+            this.items[index][key] = event.target.value;
         },
-        dragOver(event) {
-            event.preventDefault();
-        },
-        drop(event, index) {
-            event.preventDefault();
-            let draggedIndex = event.dataTransfer.getData("text/plain");
-            let draggedItem = this.items[draggedIndex];
-            this.items.splice(draggedIndex, 1);
-            this.items.splice(index, 0, draggedItem);
-        },
-        updateColor(event) {
-            this.newObject.color = event.target.value;
-        },
-        updatedBackgroundColor() {
-            let object = this.newObject.object.toLowerCase();
-            if (object.includes("ambu")) {
-                this.newObject.color = "#FFA500";
-            } else if (object.includes("ibt")) {
-                this.newObject.color = "#00FFFF";
-            } else if (object.includes("als")) {
-                this.newObject.color = "#F600FF";
-            } else {
-                this.newObject.color = "";
+        showPopup() {
+            this.popupNumber = "";
+            const number = prompt("Please enter a number:");
+            if (number !== null) {
+                this.popupNumber = number;
             }
         }
     }
