@@ -12,9 +12,11 @@
                 <div class="col-10 d-flex align-items-center justify-content-center">
                     <img
                         src="src\assets\logobackstagemaps.svg"
-                        style="width: 70px !important; margin-top: 10px"
+                        style="width: 45px; margin-top: 5px"
                     />
-                    <h1 style="margin-left: 20px; margin-top: 10px">Backstagemaps</h1>
+                    <h1 style="margin-left: 2px; margin-top: 20px; font-size: 24px">
+                        Backstagemaps
+                    </h1>
                 </div>
             </div>
         </nav>
