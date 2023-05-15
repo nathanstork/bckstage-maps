@@ -23,6 +23,7 @@
         "panzoom": "^9.4.3",
         "postcss": "^8.4.21",
         "vue": "^3.2.47",
+        "vue-query": "^1.26.0",
         "vue-router": "^4.1.6"
     },
     "devDependencies": {
