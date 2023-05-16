@@ -73,6 +73,7 @@ import { onMounted } from "vue";
 import CogIcon from "./components/Gearsettings.vue";
 import objectzone from "./components/objectform.vue";
 import store from "@/store";
+import EasyAdd from "@/components/EasyAdd.vue";
 
 export default {
     components: {
