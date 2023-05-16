@@ -6,7 +6,7 @@
     <header>
         <nav class="container text-center">
             <div class="row">
-                <div class="col-1">
+                <div class="col-2">
                     <CogIcon />
                 </div>
                 <div class="col-10 d-flex align-items-center justify-content-center">
@@ -18,6 +18,16 @@
                         />
                         <span class="hover-text">Bckstagemaps</span>
                     </div>
+                </div>
+
+                <div class="col-2">
+                    <button
+                        v-if="isLoggedIn"
+                        @click.prevent="signOut('test')"
+                        class="btn btn-outline-primary"
+                    >
+                        Log out
+                    </button>
                 </div>
             </div>
         </nav>
@@ -62,21 +72,32 @@ import { supabase } from "@/lib/supabaseClient";
 import { onMounted } from "vue";
 import CogIcon from "./components/Gearsettings.vue";
 import objectzone from "./components/objectform.vue";
-import PSlusIcon from "./components/plussettings.vue";
 import store from "@/store";
 
 export default {
     components: {
         CogIcon,
-        PSlusIcon
+        EasyAdd,
+        objectzone
+    },
+    computed: {
+        isLoggedIn() {
+            return store.state.user !== null;
+        }
     },
     setup() {
+        const signOut = ({ id }) => {
+            console.log(id);
+            store.dispatch("signOutAction");
+        };
+
         onMounted(async () => {
             const { data, error } = await supabase.auth.refreshSession();
             store.commit("setUser", data.user);
         });
-        PSlusIcon, EasyAdd;
-        objectzone;
+        return {
+            signOut
+        };
     }
 };
 </script>

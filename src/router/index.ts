@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
-import SignedIn from "@/views/SignedIn.vue";
+import EventsOverview from "@/views/EventsOverview.vue";
+import EventCreate from "@/views/EventCreate.vue";
 import NotFound from "@/views/NotFound.vue";
 import store from "@/store";
 
@@ -24,21 +25,35 @@ const routes = [
             next: (arg0: { name: string } | undefined) => void
         ) => {
             if (checks.isLoggedIn()) {
-                next({ name: "SignedIn" });
+                next({ name: "EventsOverview" });
             }
             // @ts-ignore
             next();
         }
     },
     {
-        path: "/signed-in",
-        name: "SignedIn",
-        component: SignedIn,
+        path: "/event-overview",
+        name: "EventsOverview",
+        component: EventsOverview,
         meta: {
-            title: "Signed In"
+            title: "Events overview"
         },
         beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {
-            console.log(store.state.user);
+            if (!checks.isLoggedIn()) {
+                next({ name: "Home" });
+            }
+            // @ts-ignore
+            next();
+        }
+    },
+    {
+        path: "/event-create",
+        name: "EventCreate",
+        component: EventCreate,
+        meta: {
+            title: "Events overview"
+        },
+        beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {
             if (!checks.isLoggedIn()) {
                 next({ name: "Home" });
             }
@@ -53,7 +68,14 @@ const routes = [
         meta: {
             title: "Event"
         },
-        props: true
+        props: true,
+        beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {
+            if (!checks.isLoggedIn()) {
+                next({ name: "Home" });
+            }
+            // @ts-ignore
+            next();
+        }
     },
     {
         path: "/:pathMatch(.*)*",
