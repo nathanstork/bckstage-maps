@@ -23,6 +23,12 @@
         </nav>
     </header>
     <main>
+        <div
+            class="objectform col-2 align-items-right"
+            style="float: right; margin-right: 20px; margin-top: 20px"
+        >
+            <EasyAdd></EasyAdd>
+        </div>
         <router-view />
     </main>
 </template>
@@ -33,6 +39,7 @@ import { onMounted } from "vue";
 import CogIcon from "./components/Gearsettings.vue";
 import PSlusIcon from "./components/plussettings.vue";
 import store from "@/store";
+import EasyAdd from "./components/EasyAdd.vue";
 
 export default {
     components: {
@@ -44,6 +51,7 @@ export default {
             const { data, error } = await supabase.auth.refreshSession();
             store.commit("setUser", data.user);
         });
+        PSlusIcon, EasyAdd;
     }
 };
 </script>
