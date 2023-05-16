@@ -10,36 +10,60 @@
                     <CogIcon />
                 </div>
                 <div class="col-10 d-flex align-items-center justify-content-center">
-                    <img
-                        src="src\assets\logobackstagemaps.svg"
-                        style="width: 70px !important; margin-top: 10px"
-                    />
-                    <h1 style="margin-left: 20px; margin-top: 10px">Backstagemaps</h1>
-                </div>
-                <div class="col-1">
-                    <PSlusIcon />
+                    <div class="image-container">
+                        <img
+                            src="src/assets/logobackstagemaps.svg"
+                            style="width: 60px; margin-top: 5px"
+                            class="hover-image"
+                        />
+                        <span class="hover-text">Bckstagemaps</span>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
     <main>
-        <div
-            class="objectform col-2 align-items-right"
-            style="float: right; margin-right: 20px; margin-top: 20px"
-        >
-            <EasyAdd></EasyAdd>
+        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">
+            <objectzone></objectzone>
         </div>
         <router-view />
     </main>
 </template>
 
+<style>
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hover-text {
+    position: absolute;
+    font-size: 24px;
+    top: 32px;
+    left: 60px;
+    transform: translateY(-50%);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    white-space: nowrap;
+}
+
+.hover-image:hover + .hover-text {
+    opacity: 1;
+    pointer-events: auto;
+}
+</style>
+
 <script>
 import { supabase } from "@/lib/supabaseClient";
 import { onMounted } from "vue";
 import CogIcon from "./components/Gearsettings.vue";
+import objectzone from "./components/objectform.vue";
 import PSlusIcon from "./components/plussettings.vue";
 import store from "@/store";
-import EasyAdd from "./components/EasyAdd.vue";
 
 export default {
     components: {
@@ -52,6 +76,7 @@ export default {
             store.commit("setUser", data.user);
         });
         PSlusIcon, EasyAdd;
+        objectzone;
     }
 };
 </script>
