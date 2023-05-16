@@ -1,10 +1,21 @@
-<script>
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { watch } from "vue";
+import { useEventQuery } from "@/queries/event";
 import EventMap from "@/components/EventMap.vue";
 
-export default defineComponent({
-    props: ["id"],
-    components: { EventMap }
+const props = defineProps({
+    id: {
+        type: String,
+        required: true
+    }
+});
+
+const eventQuery = useEventQuery(props.id);
+
+const { data, error, isLoading } = eventQuery;
+
+watch([data, error, isLoading], (newValue, oldValue) => {
+    console.log(newValue, oldValue);
 });
 </script>
 
