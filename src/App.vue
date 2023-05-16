@@ -6,18 +6,27 @@
     <header>
         <nav class="container text-center">
             <div class="row">
-                <div class="col-1">
+                <div class="col-2">
                     <CogIcon />
                 </div>
-                <div class="col-10 d-flex align-items-center justify-content-center">
+                <div class="col-8 d-flex align-items-center justify-content-center">
                     <img
-                        src="src\assets\logobackstagemaps.svg"
+                        src="../src/assets/logobackstagemaps.svg"
                         style="width: 70px !important; margin-top: 10px"
                     />
                     <h1 style="margin-left: 20px; margin-top: 10px">Backstagemaps</h1>
                 </div>
                 <div class="col-1">
                     <PSlusIcon />
+                </div>
+                <div class="col-1">
+                    <button
+                        v-if="isLoggedIn"
+                        @click.prevent="signOut('test')"
+                        class="btn btn-outline-primary"
+                    >
+                        Log out
+                    </button>
                 </div>
             </div>
         </nav>
@@ -39,11 +48,24 @@ export default {
         CogIcon,
         PSlusIcon
     },
+    computed: {
+        isLoggedIn() {
+            return store.state.user !== null;
+        }
+    },
     setup() {
+        const signOut = ({ id }) => {
+            console.log(id);
+            store.dispatch("signOutAction");
+        };
+
         onMounted(async () => {
             const { data, error } = await supabase.auth.refreshSession();
             store.commit("setUser", data.user);
         });
+        return {
+            signOut
+        };
     }
 };
 </script>

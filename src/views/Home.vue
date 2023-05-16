@@ -21,7 +21,7 @@ export default {
             const { data, error } = await supabase.auth.refreshSession();
             store.commit("setUser", data.user);
             if (store.state.user !== null || data.user !== null) {
-                router.push("/signed-in");
+                router.push("/event-overview");
             }
         });
     },
