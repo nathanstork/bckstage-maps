@@ -30,7 +30,18 @@ export default {
             showDropdown: false
         };
     },
+    mounted() {
+        document.addEventListener("click", this.handleOutsideClick);
+    },
+    beforeDestroy() {
+        document.removeEventListener("click", this.handleOutsideClick);
+    },
     methods: {
+        handleOutsideClick(event) {
+            if (!this.$el.contains(event.target)) {
+                this.showDropdown = false;
+            }
+        },
         toggleDropdown() {
             this.showDropdown = !this.showDropdown;
         }
@@ -75,5 +86,10 @@ export default {
 
 .fa-cog {
     cursor: pointer;
+    transition: transform 0.3s ease-in-out; /* add transition */
+}
+
+.fa-cog:hover {
+    transform: rotate(90deg); /* rotate on hover */
 }
 </style>
