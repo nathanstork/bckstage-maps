@@ -22,7 +22,7 @@ const props = defineProps({
             </div>
         </a>
 
-        <button class="btn btn-dark btn-small">
+        <button class="btn btn-dark btn-small px-2">
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
