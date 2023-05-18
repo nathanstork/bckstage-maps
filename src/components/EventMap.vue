@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import Panzoom from "panzoom";
 import { PanZoom } from "panzoom";
 // Ignore type errors for import as @tato/vue-pdf is not typed
@@ -14,7 +14,6 @@ const props = defineProps({
     }
 });
 
-const initialZoom = 0.5;
 const boundsPadding = 5;
 
 const panzoom = ref<PanZoom>();
@@ -25,16 +24,10 @@ const { pdf } = usePDF(
 );
 const rotation = ref(-90); // Only applicable for this hardcoded PDF file
 
-onMounted(() => {
+const onPdfLoaded = () => {
     if (panzoomContent.value)
         panzoom.value = Panzoom(panzoomContent.value, {
-            initialX:
-                document.documentElement.clientWidth / 2 -
-                (panzoomContent.value.clientWidth / 2) * initialZoom,
-            initialY:
-                document.documentElement.clientHeight / 2 -
-                (panzoomContent.value.clientHeight / 2) * initialZoom,
-            initialZoom,
+            autocenter: true,
             zoomSpeed: 0.065,
             minZoom: 0.25,
             maxZoom: 3,
@@ -45,7 +38,9 @@ onMounted(() => {
                 bottom: document.documentElement.clientHeight - boundsPadding
             }
         });
-});
+
+    props.onLoaded();
+};
 </script>
 
 <template>
@@ -57,7 +52,7 @@ onMounted(() => {
                 :page="1"
                 :rotation="rotation"
                 :text-layer="false"
-                @loaded="props.onLoaded"
+                @loaded="onPdfLoaded"
             />
         </div>
     </div>
