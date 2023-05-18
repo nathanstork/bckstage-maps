@@ -1,8 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "@/router";
+import { BootstrapIconsPlugin } from "bootstrap-icons-vue";
 import { VueQueryPlugin } from "vue-query";
 
 import "./assets/main.css";
 
-createApp(App).use(router).use(VueQueryPlugin).mount("#app");
+createApp(App).use(router).use(BootstrapIconsPlugin).use(VueQueryPlugin).mount("#app");
