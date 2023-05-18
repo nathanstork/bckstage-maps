@@ -44,7 +44,7 @@ const onPdfLoaded = () => {
 </script>
 
 <template>
-    <div id="panzoomContainer" class="overflow-hidden min-vw-100 min-vh-100">
+    <div id="panzoomContainer" class="overflow-hidden min-vw-100 min-vh-100 bg-dark">
         <div ref="panzoomContent" class="d-inline-block">
             <VuePDF
                 class="d-inline-block"
@@ -57,9 +57,3 @@ const onPdfLoaded = () => {
         </div>
     </div>
 </template>
-
-<style>
-#panzoomContainer {
-    background-color: #183238;
-}
-</style>
