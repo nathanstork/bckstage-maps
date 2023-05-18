@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive, watch } from "vue";
+import { ref, watch } from "vue";
 import { useEventQuery } from "@/queries/event";
 import Layout from "@/components/EventLayout.vue";
-import EventMap from "@/components/EventMap.vue";
 import LoadingView from "@/views/LoadingView.vue";
+import EventMap from "@/components/EventMap.vue";
 
 const props = defineProps({
     id: {
@@ -12,17 +12,13 @@ const props = defineProps({
     }
 });
 
-const localStore = reactive({
-    mapLoaded: false
-});
+const mapLoaded = ref(false);
 
 const eventQuery = useEventQuery(props.id);
 
 const { data, error, isLoading } = eventQuery;
 
-const setMapLoaded = () => {
-    localStore.mapLoaded = true;
-};
+const setMapLoaded = () => (mapLoaded.value = true);
 
 watch([data, error, isLoading], (newValue, oldValue) => {
     if (!isLoading) console.log(newValue, oldValue);
@@ -31,7 +27,7 @@ watch([data, error, isLoading], (newValue, oldValue) => {
 
 <template>
     <Layout :title="props.id">
-        <LoadingView v-if="isLoading || !localStore.mapLoaded" />
-        <EventMap :afterInit="setMapLoaded" />
+        <LoadingView v-if="isLoading || !mapLoaded" />
+        <EventMap :onLoaded="setMapLoaded" />
     </Layout>
 </template>
