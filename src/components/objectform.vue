@@ -186,11 +186,11 @@ body {
 }
 
 /* Easy Add Section*/
-.btn {
+/*.btn {
     width: 190px;
     margin-bottom: 5px;
     margin-left: 10px;
-}
+}*/
 
 .btn-ambu {
     background-color: #ffa500;

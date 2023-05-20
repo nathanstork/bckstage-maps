@@ -3,7 +3,7 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <header>
+    <!--    <header>
         <nav class="container text-center">
             <div class="row">
                 <div class="col-2">
@@ -31,11 +31,11 @@
                 </div>
             </div>
         </nav>
-    </header>
+    </header>-->
     <main>
-        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">
+        <!--        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">
             <objectzone></objectzone>
-        </div>
+        </div>-->
         <router-view />
     </main>
 </template>
