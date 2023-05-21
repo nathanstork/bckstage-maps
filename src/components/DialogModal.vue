@@ -24,7 +24,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <transition name="fade" appear>
+    <transition name="fade" appear :duration="300">
         <div v-if="props.show" class="d-block modal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content bg-dark" style="z-index: 1050">
@@ -57,23 +57,19 @@ const props = defineProps({
                 </div>
             </div>
             <!-- Backdrop -->
-            <div
-                v-if="show"
-                class="fixed-top min-vw-100 min-vh-100"
-                style="background-color: black; opacity: 0.5; z-index: 1040"
-            />
+            <div v-if="show" class="modal-backdrop" style="opacity: 0.5" />
         </div>
     </transition>
 </template>
 
 <style>
-.v-enter-active,
-.v-leave-active {
-    transition: opacity 0.5s ease;
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease-in-out;
 }
 
-.v-enter-from,
-.v-leave-to {
+.fade-enter-from,
+.fade-leave-to {
     opacity: 0;
 }
 </style>
