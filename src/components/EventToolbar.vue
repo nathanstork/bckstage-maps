@@ -1,10 +1,15 @@
 <script setup>
+import { ref } from "vue";
+import DialogModal from "@/components/DialogModal.vue";
+
 const props = defineProps({
     title: {
         type: String,
         required: true
     }
 });
+
+const showModal = ref(false);
 </script>
 
 <template>
@@ -22,8 +27,25 @@ const props = defineProps({
             </div>
         </a>
 
-        <button class="btn btn-dark btn-small px-2">
+        <button
+            class="btn btn-dark btn-small px-2"
+            @click="
+                () => {
+                    showModal = true;
+                }
+            "
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
+    <DialogModal
+        :show="showModal"
+        title="Test"
+        body="Test"
+        :onCancel="
+            () => {
+                showModal = false;
+            }
+        "
+    />
 </template>
