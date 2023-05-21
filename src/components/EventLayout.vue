@@ -1,5 +1,5 @@
 <script setup>
-import Navbar from "@/components/EventToolbar.vue";
+import Toolbar from "@/components/EventToolbar.vue";
 
 const props = defineProps({
     title: {
@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <Navbar :title="props.title" />
+    <Toolbar :title="props.title" />
     <div class="min-vw-100 min-vh-100">
         <slot />
     </div>
