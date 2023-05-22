@@ -9,7 +9,7 @@
                 <div class="col-2">
                     <CogIcon />
                 </div>
-                <div class="col-10 d-flex align-items-center justify-content-center">
+                <div class="col-8 d-flex align-items-center justify-content-center">
                     <div class="image-container">
                         <img
                             src="src/assets/logobackstagemaps.svg"
@@ -20,7 +20,7 @@
                     </div>
                 </div>
 
-                <div class="col-2">
+                <div class="col-2 pt-3">
                     <button
                         v-if="isLoggedIn"
                         @click.prevent="signOut('test')"
@@ -33,9 +33,10 @@
         </nav>
     </header>
     <main>
-        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">
-            <objectzone></objectzone>
-        </div>
+        <!--      Hoort niet hier -->
+        <!--        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">-->
+        <!--            <objectzone></objectzone>-->
+        <!--        </div>-->
         <router-view />
     </main>
 </template>

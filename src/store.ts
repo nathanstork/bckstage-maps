@@ -10,7 +10,9 @@ const store = createStore({
         event: {
             name: "",
             starts_at: "",
-            ends_at: ""
+            ends_at: "",
+            created_by: "",
+            id: ""
         },
         events: []
     },
@@ -44,6 +46,21 @@ const store = createStore({
                 starts_at: event.starts_at,
                 ends_at: event.ends_at
             });
+            if (error) throw error;
+            await router.push("/event-overview");
+        },
+        async eventUpdate() {
+            let event = store.state.event;
+            console.log(event);
+            const { data, error } = await supabase
+                .from("events")
+                .update({
+                    name: event.name,
+                    starts_at: event.starts_at,
+                    ends_at: event.ends_at
+                })
+                .eq("id", event.id);
+            if (error) throw error;
             await router.push("/event-overview");
         }
     }
