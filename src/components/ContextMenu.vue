@@ -5,6 +5,7 @@ import type { PropType } from "vue";
 export interface ContextMenuItem {
     text: string;
     onClick: () => void;
+    disabled?: boolean;
     divider?: boolean; // Whether to render a divider after this menu item
 }
 
@@ -69,7 +70,12 @@ watch(
     >
         <template v-for="(item, index) in props.items" :key="`context-menu-item-${index}`">
             <li>
-                <button class="dropdown-item" type="button" @click="menuItemClick(item.onClick)">
+                <button
+                    class="dropdown-item"
+                    type="button"
+                    :disabled="item.disabled"
+                    @click="menuItemClick(item.onClick)"
+                >
                     {{ item.text }}
                 </button>
             </li>
