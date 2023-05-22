@@ -17,6 +17,8 @@ const props = defineProps({
 
 const boundsPadding = 5;
 
+const componentKey = ref(0);
+
 const panzoom = ref<PanZoom>();
 const panzoomContent = ref<HTMLElement>();
 
@@ -46,9 +48,9 @@ const contextMenuItems: ContextMenuItem[] = [
     },
     contextMenuLockItem.value,
     {
-        text: "Reset zoom",
+        text: "Reset map",
         onClick: () => {
-            console.log("Reset zoom"); // TODO
+            componentKey.value++; // Unmount and remount component by changing the key
         }
     }
 ];
@@ -67,7 +69,7 @@ const onPdfLoaded = () => {
             maxZoom: 3,
             bounds: {
                 left: boundsPadding,
-                top: boundsPadding + 68,
+                top: boundsPadding + 70,
                 right: document.documentElement.clientWidth - boundsPadding,
                 bottom: document.documentElement.clientHeight - boundsPadding
             }
@@ -100,6 +102,7 @@ watch(lockMap, newValue => {
 
 <template>
     <div
+        :key="componentKey"
         id="panzoomContainer"
         class="overflow-hidden min-vw-100 min-vh-100 bg-dark"
         @contextmenu="onContextMenu"
