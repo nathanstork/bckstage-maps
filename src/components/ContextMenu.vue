@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, watch } from "vue";
 import type { PropType } from "vue";
 
 export interface ContextMenuItem {
@@ -27,16 +28,43 @@ const props = defineProps({
     }
 });
 
+const menuRef = ref<HTMLElement>();
+
+const x = ref<number>(props.x);
+const y = ref<number>(props.y);
+
 const menuItemClick = (action: () => void) => {
     action();
     props.onClose();
 };
+
+watch(
+    () => [props.x, props.y, menuRef.value],
+    newValue => {
+        if (!menuRef.value) return;
+
+        const newX = newValue[0] as number;
+        const newY = newValue[1] as number;
+
+        // Prevent context menu from going off-screen
+        if (newX + menuRef.value?.getBoundingClientRect().width > window.innerWidth) {
+            newValue[0] = window.innerWidth - menuRef.value?.getBoundingClientRect().width;
+        }
+        if (newY + menuRef.value?.getBoundingClientRect().height > window.innerHeight) {
+            newValue[1] = window.innerHeight - menuRef.value?.getBoundingClientRect().height;
+        }
+
+        x.value = newValue[0] as number;
+        y.value = newValue[1] as number;
+    }
+);
 </script>
 
 <template>
     <ul
+        ref="menuRef"
         class="position-fixed d-flex flex-column dropdown-menu dropdown-menu-dark"
-        :style="{ left: `${props.x}px`, top: `${props.y}px` }"
+        :style="{ left: `${x}px`, top: `${y}px` }"
         v-click-outside-element="props.onClose"
     >
         <template v-for="(item, index) in props.items" :key="`context-menu-item-${index}`">
