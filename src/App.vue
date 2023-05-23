@@ -33,9 +33,10 @@
         </nav>
     </header>-->
     <main>
-        <!--        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">
-            <objectzone></objectzone>
-        </div>-->
+        <!--      Hoort niet hier -->
+        <!--        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">-->
+        <!--            <objectzone></objectzone>-->
+        <!--        </div>-->
         <router-view />
     </main>
 </template>

@@ -51,7 +51,7 @@ const routes = [
         name: "EventCreate",
         component: EventCreate,
         meta: {
-            title: "Events overview"
+            title: "Event create"
         },
         beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {
             if (!checks.isLoggedIn()) {
@@ -67,6 +67,22 @@ const routes = [
         component: () => import("../views/EventView.vue"), // Lazy load the view
         meta: {
             title: "Event"
+        },
+        props: true,
+        beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {
+            if (!checks.isLoggedIn()) {
+                next({ name: "Home" });
+            }
+            // @ts-ignore
+            next();
+        }
+    },
+    {
+        path: "/event-edit//:id",
+        name: "EventUpdate",
+        component: () => import("../views/EventUpdate.vue"),
+        meta: {
+            title: "Event Edit"
         },
         props: true,
         beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {

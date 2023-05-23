@@ -10,7 +10,6 @@ import { onMounted } from "vue";
 import { supabase } from "@/lib/supabaseClient";
 import store from "@/store";
 import router from "@/router";
-// import store from "@/store";
 
 export default {
     components: {
