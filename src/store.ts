@@ -31,7 +31,7 @@ const store = createStore({
         async signInAction() {
             const { data, error } = await supabase.auth.signInWithOAuth({ provider: "github" });
             if (error) throw error;
-            await router.push("/event-overview");
+            await router.push("/events");
         },
         async signOutAction() {
             await supabase.auth.signOut();
@@ -47,7 +47,7 @@ const store = createStore({
                 ends_at: event.ends_at
             });
             if (error) throw error;
-            await router.push("/event-overview");
+            await router.push("/events");
         },
         async eventUpdate() {
             let event = store.state.event;
@@ -61,7 +61,7 @@ const store = createStore({
                 })
                 .eq("id", event.id);
             if (error) throw error;
-            await router.push("/event-overview");
+            await router.push("/events");
         }
     }
 });

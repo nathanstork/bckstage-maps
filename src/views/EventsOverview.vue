@@ -29,7 +29,7 @@ function GoToEvent(id) {
 }
 
 function EventUpdate(id) {
-    router.push("/event-edit/" + id);
+    router.push("/event/" + id + "/edit");
 }
 
 function EventCreate() {

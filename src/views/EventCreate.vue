@@ -75,7 +75,7 @@ export default {
     },
     methods: {
         Back() {
-            router.push("event-overview");
+            router.push("/events");
         },
         Save() {
             if (

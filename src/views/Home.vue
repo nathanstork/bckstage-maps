@@ -132,7 +132,7 @@ export default {
             const { data, error } = await supabase.auth.refreshSession();
             store.commit("setUser", data.user);
             if (store.state.user !== null || data.user !== null) {
-                router.push("/event-overview");
+                router.push("/events");
             }
         });
 

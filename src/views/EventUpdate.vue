@@ -35,7 +35,7 @@ watch([data, error, isLoading], newValue => {
 });
 
 function Back() {
-    router.push("../event-overview");
+    router.push("/events");
 }
 
 function Save() {

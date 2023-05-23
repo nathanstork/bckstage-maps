@@ -32,7 +32,7 @@ const routes = [
         }
     },
     {
-        path: "/event-overview",
+        path: "/events",
         name: "EventsOverview",
         component: EventsOverview,
         meta: {
@@ -78,7 +78,7 @@ const routes = [
         }
     },
     {
-        path: "/event-edit//:id",
+        path: "/event/:id/edit",
         name: "EventUpdate",
         component: () => import("../views/EventUpdate.vue"),
         meta: {
