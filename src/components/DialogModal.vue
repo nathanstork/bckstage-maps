@@ -57,7 +57,7 @@ const props = defineProps({
                 </div>
             </div>
             <!-- Backdrop -->
-            <div v-if="show" class="modal-backdrop" style="opacity: 0.5" />
+            <div v-if="show" class="modal-backdrop" style="opacity: 0.5" @click="props.onCancel" />
         </div>
     </transition>
 </template>
