@@ -86,6 +86,11 @@ export default {
                 store.dispatch("eventCreate");
             }
         }
+    },
+    mounted() {
+        this.event.name = "";
+        this.event.starts_at = "";
+        this.event.ends_at = "";
     }
 };
 </script>

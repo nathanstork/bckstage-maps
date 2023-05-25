@@ -5,6 +5,7 @@ import { BootstrapIconsPlugin } from "bootstrap-icons-vue";
 import { VueQueryPlugin } from "vue-query";
 import vueClickOutsideElement from "vue-click-outside-element";
 
+// @ts-ignore
 import DateFormat from "@voidsolutions/vue-dateformat";
 import "./assets/main.css";
 

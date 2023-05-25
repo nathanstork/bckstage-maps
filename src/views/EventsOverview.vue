@@ -4,6 +4,7 @@ import { computed, toRaw, watch } from "vue";
 import store from "@/store";
 import { supabase } from "@/lib/supabaseClient";
 import router from "@/router";
+import { useQueryClient, useQuery, useMutation } from "vue-query";
 
 const { data, error, isLoading } = useEventsQuery();
 const user = computed(() => {
@@ -34,6 +35,23 @@ function EventUpdate(id) {
 
 function EventCreate() {
     router.push("event-create");
+}
+
+const queryClient = useQueryClient();
+
+const mutation = useMutation({
+    mutationFn: async eventId => {
+        console.log(eventId);
+        return await supabase.from("events").delete().eq("id", eventId);
+    },
+    onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries({ queryKey: ["events"] });
+    }
+});
+
+function onButtonClick(id) {
+    mutation.mutate(id);
 }
 </script>
 <template>
@@ -75,7 +93,7 @@ function EventCreate() {
                                 Edit
                             </button>
                             <button
-                                @click.prevent="DeleteEvent(event.id)"
+                                @click.prevent="onButtonClick(event.id)"
                                 class="btn btn-outline-primary"
                             >
                                 Delete
