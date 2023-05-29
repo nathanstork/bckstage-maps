@@ -4,6 +4,7 @@ import { useEventQuery } from "@/queries/event";
 import store from "../store";
 import router from "@/router";
 import moment from "moment";
+import { useMapMutation } from "@/mutations/map";
 
 const props = defineProps({
     id: {
@@ -22,6 +23,8 @@ const event = computed(() => {
 const eventQuery = useEventQuery(props.id);
 
 const { data, error, isLoading } = eventQuery;
+
+const mapMutation = useMapMutation(props.id);
 
 watch([data, error, isLoading], newValue => {
     // console.log(newValue[0]['data']);
@@ -45,6 +48,13 @@ function Save() {
     //     this.event.ends_at !== ""
     // ) {
     store.dispatch("eventUpdate");
+
+    // Upload map, if a file is selected
+    const mapFile = (document.getElementById("mapFile") as HTMLInputElement).files?.[0];
+
+    if (!mapFile) return;
+
+    mapMutation.mutate(mapFile);
     // }
 }
 </script>
@@ -96,6 +106,15 @@ function Save() {
                             max=""
                             required
                         />
+                    </div>
+                    <div class="form-group pmd-textfield pmd-textfield-floating-label">
+                        <label class="control-label">Map</label>
+                        <div class="d-flex">
+                            <input class="form-control" type="file" id="mapFile" />
+                            <!--<button @click.prevent="upload" class="btn btn-sm btn-secondary ms-2">
+                                Upload
+                            </button>-->
+                        </div>
                     </div>
 
                     <div class="form-group pt-4">

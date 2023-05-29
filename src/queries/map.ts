@@ -18,7 +18,8 @@ export const useMapQuery = (id: string) =>
                         }
 
                         resolve(
-                            supabase.storage.from("maps").getPublicUrl(fileName).data.publicUrl
+                            supabase.storage.from("maps").getPublicUrl(`${id}/${fileName}`).data
+                                .publicUrl
                         );
                     })
                     .catch(reject)
