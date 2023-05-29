@@ -19,12 +19,10 @@ const showModal = ref(false);
         </h4>
 
         <a
-            class="position-absolute top-50 start-50 translate-middle d-none d-md-block mx-auto"
+            class="position-absolute top-50 start-50 d-inline-block translate-middle d-none d-md-block mx-auto"
             href="/"
         >
-            <div class="image-container">
-                <img src="../assets/logobackstagemaps.svg" alt="Bckstagemaps logo" height="24" />
-            </div>
+            <img src="../assets/logobackstagemaps.svg" alt="Bckstagemaps logo" height="24" />
         </a>
 
         <button
