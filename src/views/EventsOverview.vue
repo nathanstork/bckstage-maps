@@ -95,13 +95,13 @@ function getDotClass(event) {
     <div class="container pt-5">
         <div class="d-flex justify-content-between">
             <div class="col-3">
-                <h1 class="text-2xl font-semibold" style="margin-left: 45px">Events</h1>
+                <h1 class="text-2xl font-semibold" style="margin-left: 95px">Events</h1>
             </div>
             <div class="col-3">
                 <button
                     @click.prevent="EventCreate"
                     class="btn btn-primary"
-                    style="width: 130px; border: solid 2px black; margin-left: 18px"
+                    style="width: 130px; border: solid 2px black; margin-left: 48px"
                 >
                     Add event
                 </button>
@@ -111,7 +111,7 @@ function getDotClass(event) {
             <div class="col-md-12">
                 <table
                     class="table table-dark table-hover"
-                    style="max-width: 1200px; margin: 0 auto"
+                    style="max-width: 1100px; margin: 0 auto"
                 >
                     <thead>
                         <tr>
@@ -123,7 +123,7 @@ function getDotClass(event) {
                     </thead>
                     <tbody>
                         <tr v-for="event in orderedEvents" :key="event.id" style="cursor: pointer">
-                            <td style="padding-right: 140px" @click.prevent="GoToEvent(event.id)">
+                            <td style="padding-right: 90px" @click.prevent="GoToEvent(event.id)">
                                 {{ event.name }}
                             </td>
                             <td @click.prevent="GoToEvent(event.id)">
@@ -166,7 +166,7 @@ function getDotClass(event) {
 .button-container {
     display: flex;
     justify-content: flex-end;
-    margin-right: 120px;
+    margin-right: 40px;
 }
 
 .dot-red {
