@@ -4,12 +4,13 @@ import router from "@/router";
 import { BootstrapIconsPlugin } from "bootstrap-icons-vue";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import vueClickOutsideElement from "vue-click-outside-element";
+import withUUID from "vue-uuid";
 // @ts-ignore
 import DateFormat from "@voidsolutions/vue-dateformat";
 
 import "./assets/main.css";
 
-createApp(App)
+withUUID(createApp(App))
     .use(router)
     .use(BootstrapIconsPlugin)
     .use(VueQueryPlugin)
