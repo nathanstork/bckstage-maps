@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
 import EventsOverview from "@/views/EventsOverview.vue";
 import EventCreate from "@/views/EventCreate.vue";
-import NotFound from "@/views/NotFound.vue";
+import NotFound from "@/views/NotFoundView.vue";
 import store from "@/store";
 
 const checks = {
