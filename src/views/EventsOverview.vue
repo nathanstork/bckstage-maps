@@ -4,7 +4,7 @@ import { computed, toRaw, watch } from "vue";
 import store from "@/store";
 import { supabase } from "@/lib/supabaseClient";
 import router from "@/router";
-import { useQueryClient, useQuery, useMutation } from "vue-query";
+import { useQueryClient, useMutation } from "vue-query";
 
 const { data, error, isLoading } = useEventsQuery();
 const user = computed(() => {
@@ -16,6 +16,20 @@ const events = computed(() => {
 
 watch([data, error, isLoading], newValue => {
     store.state.events = toRaw(newValue[0]["data"]);
+});
+
+const orderedEvents = computed(() => {
+    const pastEvents = events.value.filter(event => {
+        const endDate = new Date(event.ends_at);
+        return endDate < new Date();
+    });
+
+    const futureEvents = events.value.filter(event => {
+        const endDate = new Date(event.ends_at);
+        return endDate >= new Date();
+    });
+
+    return [...futureEvents, ...pastEvents];
 });
 
 // mutation
@@ -53,55 +67,123 @@ const mutation = useMutation({
 function onButtonClick(id) {
     mutation.mutate(id);
 }
+
+function formatDate(date) {
+    const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "numeric"
+    };
+    return new Date(date).toLocaleString([], options);
+}
+
+function getDotClass(event) {
+    const now = new Date();
+    const endDate = new Date(event.ends_at);
+
+    if (endDate < now) {
+        return "dot-red";
+    } else {
+        return "dot-green";
+    }
+}
 </script>
+
 <template>
     <div class="container pt-5">
-        <div class="flex items-center h-full">
-            <div class="row justify-content-between">
-                <div class="col-3">
-                    <h1 class="text-2xl font-semibold">Events</h1>
-                </div>
-                <div class="col-3">
-                    <button @click.prevent="EventCreate" class="btn btn-outline-primary">
-                        Add event
-                    </button>
-                </div>
+        <div class="d-flex justify-content-between">
+            <div class="col-3">
+                <h1 class="text-2xl font-semibold" style="margin-left: 45px">Events</h1>
             </div>
-            <table class="table table-dark table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Starts at</th>
-                        <th scope="col">Ends at</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="event in events" style="cursor: pointer">
-                        <td @click.prevent="GoToEvent(event.id)">{{ event.name }}</td>
-                        <td @click.prevent="GoToEvent(event.id)">
-                            <date-format :date="event.starts_at" has-time />
-                        </td>
-                        <td @click.prevent="GoToEvent(event.id)">
-                            <date-format :date="event.ends_at" has-time />
-                        </td>
-                        <td>
-                            <button
-                                @click.prevent="EventUpdate(event.id)"
-                                class="btn btn-outline-primary"
-                            >
-                                Edit
-                            </button>
-                            <button
-                                @click.prevent="onButtonClick(event.id)"
-                                class="btn btn-outline-primary"
-                            >
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="col-3">
+                <button
+                    @click.prevent="EventCreate"
+                    class="btn btn-primary"
+                    style="width: 130px; border: solid 2px black; margin-left: 18px"
+                >
+                    Add event
+                </button>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <table
+                    class="table table-dark table-hover"
+                    style="max-width: 1200px; margin: 0 auto"
+                >
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Starts at</th>
+                            <th scope="col">Ends at</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="event in orderedEvents" :key="event.id" style="cursor: pointer">
+                            <td style="padding-right: 140px" @click.prevent="GoToEvent(event.id)">
+                                {{ event.name }}
+                            </td>
+                            <td @click.prevent="GoToEvent(event.id)">
+                                {{ formatDate(event.starts_at) }}
+                            </td>
+                            <td @click.prevent="GoToEvent(event.id)">
+                                {{ formatDate(event.ends_at) }}
+                                <span :class="getDotClass(event)"></span>
+                            </td>
+                            <td class="button-cell">
+                                <div class="button-container">
+                                    <button
+                                        @click.prevent="EventUpdate(event.id)"
+                                        class="btn btn-outline-primary"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        style="margin-left: 5px"
+                                        @click.prevent="onButtonClick(event.id)"
+                                        class="btn btn-outline-primary"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
+
+<style>
+.button-cell {
+    text-align: right;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 120px;
+}
+
+.dot-red {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.dot-green {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: green;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+</style>
