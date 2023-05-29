@@ -8,6 +8,10 @@ import ContextMenu from "@/components/ContextMenu.vue";
 import type { ContextMenuItem } from "@/components/ContextMenu.vue";
 
 const props = defineProps({
+    map: {
+        type: String,
+        required: true
+    },
     onLoaded: {
         type: Function,
         required: false,
@@ -88,9 +92,7 @@ const contextMenuItems: ContextMenuItem[] = [
     }
 ];
 
-const { pdf } = usePDF(
-    "https://gudxawknwihalccacopu.supabase.co/storage/v1/object/public/maps/HJ2019%20terreintekening%20versie1.9%20all%20.pdf"
-);
+const { pdf } = usePDF(props.map);
 const rotation = ref(-90); // Only applicable for this hardcoded PDF file
 
 const onPdfLoaded = () => {
