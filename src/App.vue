@@ -3,35 +3,31 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <!--    <header>
-        <nav class="container text-center">
-            <div class="row">
-                <div class="col-2">
-                    <CogIcon />
-                </div>
-                <div class="col-10 d-flex align-items-center justify-content-center">
-                    <div class="image-container">
-                        <img
-                            src="src/assets/logobackstagemaps.svg"
-                            style="width: 60px; margin-top: 5px"
-                            class="hover-image"
-                        />
-                        <span class="hover-text">Bckstagemaps</span>
-                    </div>
-                </div>
+    <!--      <header>-->
+    <!--        <nav class="container text-center">-->
+    <!--            <div class="row">-->
+    <!--                <div class="col-2">-->
+    <!--                    <CogIcon />-->
+    <!--                </div>-->
+    <!--                <div class="col-10 d-flex align-items-center justify-content-center">-->
+    <!--                    <div class="image-container">-->
+    <!--                        <img-->
+    <!--                            src="src/assets/logobackstagemaps.svg"-->
+    <!--                            style="width: 60px; margin-top: 5px"-->
+    <!--                            class="hover-image"-->
+    <!--                        />-->
+    <!--                        <span class="hover-text">Bckstagemaps</span>-->
+    <!--                    </div>-->
+    <!--                </div>-->
 
-                <div class="col-2">
-                    <button
-                        v-if="isLoggedIn"
-                        @click.prevent="signOut('test')"
-                        class="btn btn-outline-primary"
-                    >
-                        Log out
-                    </button>
-                </div>
-            </div>
-        </nav>
-    </header>-->
+    <!--                <div class="col-2">-->
+    <button v-if="isLoggedIn" @click.prevent="signOut('test')" class="btn btn-outline-primary">
+        Log out
+    </button>
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </nav>-->
+    <!--    </header>-->
     <main>
         <!--      Hoort niet hier -->
         <!--        <div class="objectform col-2 align-items-right" style="float: right; margin-top: 20px">-->
