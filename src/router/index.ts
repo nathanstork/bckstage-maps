@@ -3,6 +3,7 @@ import Home from "@/views/HomeView.vue";
 import EventsOverview from "@/views/EventsOverview.vue";
 import EventCreate from "@/views/EventCreate.vue";
 import NotFound from "@/views/NotFoundView.vue";
+import ObjectForm from "@/components/ObjectForm.vue";
 import store from "@/store";
 
 const checks = {
@@ -83,6 +84,22 @@ const routes = [
         component: () => import("../views/EventUpdate.vue"),
         meta: {
             title: "Event Edit"
+        },
+        props: true,
+        beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {
+            if (!checks.isLoggedIn()) {
+                next({ name: "Home" });
+            }
+            // @ts-ignore
+            next();
+        }
+    },
+    {
+        path: "/ObjectForm",
+        name: "ObjectForm",
+        component: ObjectForm,
+        meta: {
+            title: "Object Form"
         },
         props: true,
         beforeEnter: (to: any, from: any, next: (arg0: { name: string } | undefined) => void) => {

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import DialogModal from "@/components/DialogModal.vue";
+import { useRouter } from "vue-router";
+import ObjectForm from "@/components/ObjectForm.vue";
 
 const props = defineProps({
     title: {
@@ -9,7 +10,12 @@ const props = defineProps({
     }
 });
 
-const showModal = ref(false);
+const showObjectForm = ref(false);
+const router = useRouter();
+
+const openObjectForm = () => {
+    showObjectForm.value = !showObjectForm.value;
+};
 </script>
 
 <template>
@@ -25,25 +31,13 @@ const showModal = ref(false);
             <img src="../assets/logobackstagemaps.svg" alt="Bckstagemaps logo" height="24" />
         </a>
 
-        <button
-            class="btn btn-dark btn-small px-2"
-            @click="
-                () => {
-                    showModal = true;
-                }
-            "
-        >
+        <button class="btn btn-dark btn-small px-2" @click="openObjectForm">
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
-    <DialogModal
-        :show="showModal"
-        title="Test"
-        body="Test"
-        :onCancel="
-            () => {
-                showModal = false;
-            }
-        "
-    />
+    <div class="col-10">
+        <template v-if="showObjectForm">
+            <ObjectForm />
+        </template>
+    </div>
 </template>
