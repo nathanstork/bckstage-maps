@@ -35,9 +35,4 @@ const openObjectForm = () => {
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
-    <div class="col-10">
-        <template v-if="showObjectForm">
-            <ObjectForm />
-        </template>
-    </div>
 </template>

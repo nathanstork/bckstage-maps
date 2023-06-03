@@ -1,5 +1,5 @@
 <template>
-    <div class="ObjectFrom">
+    <div class="objectzone">
         <button type="button" class="eyeopen" @click="expandTable">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -90,90 +90,90 @@
                 </tr>
             </tbody>
         </table>
-        <div class="buttons" v-if="!isTableExpanded">
-            <button
-                type="button"
-                class="btn btn-ambu"
-                @click="addItemWithColor('Ambu', '#FFA500', 'deleteAmbu')"
-            >
-                Ambu
-            </button>
-            <button
-                type="button"
-                class="btn btn-als"
-                @click="addItemWithColor('ALS', '#FF00DF', 'deleteALS')"
-            >
-                ALS
-            </button>
-            <button
-                type="button"
-                class="btn btn-ibt"
-                @click="addItemWithColor('IBT', '#00FFFF', 'deleteIBT')"
-            >
-                IBT
-            </button>
-            <button
-                type="button"
-                class="btn btn-custom"
-                data-bs-toggle="collapse"
-                data-bs-target="#customscreen"
-                aria-expanded="false"
-                aria-controls="customscreen"
-            >
-                Custom [+]
-            </button>
-            <div class="collapse collapse-up" id="customscreen" ref="customscreen">
-                <div class="customscreen bg-dark text-light" ref="customscreen">
-                    <div class="mb-3">
-                        <label for="object-input" class="form-label">Object:</label>
-                        <input
-                            class="form-control"
-                            type="text"
-                            id="object-input"
-                            v-model="newObject.object"
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="color-select" class="form-label">Label:</label>
-                        <select
-                            class="form-select"
-                            id="color-select"
-                            v-model="newObject.color"
-                            @change="updateColor"
+    </div>
+    <div class="buttons" v-if="!isTableExpanded">
+        <button
+            type="button"
+            class="btn btn-ehbo"
+            @click="addItemWithColor('EHBO', '#FFA500', 'deleteEHBO')"
+        >
+            EHBO
+        </button>
+        <button
+            type="button"
+            class="btn btn-als"
+            @click="addItemWithColor('ALS', '#FF00DF', 'deleteALS')"
+        >
+            ALS
+        </button>
+        <button
+            type="button"
+            class="btn btn-ibt"
+            @click="addItemWithColor('IBT', '#00FFFF', 'deleteIBT')"
+        >
+            IBT
+        </button>
+        <button
+            type="button"
+            class="btn btn-custom"
+            data-bs-toggle="collapse"
+            data-bs-target="#customscreen"
+            aria-expanded="false"
+            aria-controls="customscreen"
+        >
+            Custom [+]
+        </button>
+        <div class="collapse collapse-up" id="customscreen" ref="customscreen">
+            <div class="customscreen bg-dark text-light" ref="customscreen">
+                <div class="mb-3">
+                    <label for="object-input" class="form-label">Object:</label>
+                    <input
+                        class="form-control"
+                        type="text"
+                        id="object-input"
+                        v-model="newObject.object"
+                    />
+                </div>
+                <div class="mb-3">
+                    <label for="color-select" class="form-label">Label:</label>
+                    <select
+                        class="form-select"
+                        id="color-select"
+                        v-model="newObject.color"
+                        @change="updateColor"
+                    >
+                        <option value="">Choose Label</option>
+                        <option
+                            v-for="(color, index) in colorList"
+                            :value="color.value"
+                            :key="index"
                         >
-                            <option value="">Choose Label</option>
-                            <option
-                                v-for="(color, index) in colorList"
-                                :value="color.value"
-                                :key="index"
-                            >
-                                {{ color.name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label
-                            class="d-block text-center mb-2 text-light"
-                            :style="{
-                                backgroundColor: newObject.color,
-                                color: 'black',
-                                padding: '5px',
-                                width: '187px',
-                                margin: '0 auto',
-                                textAlign: 'center'
-                            }"
-                            >{{ newObject.object }}</label
-                        >
-                    </div>
-                    <div class="mb-3">
-                        <button
-                            class="btn btn-primary d-block mx-auto"
-                            style="background-color: #0096ff; margin-top: -6px"
-                            @click="addItemWithCustomColor"
-                        >
-                            Add
-                        </button>
-                    </div>
+                            {{ color.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label
+                        class="d-block text-center mb-2 text-light"
+                        :style="{
+                            backgroundColor: newObject.color,
+                            color: 'black',
+                            padding: '5px',
+                            width: '187px',
+                            margin: '0 auto',
+                            textAlign: 'center'
+                        }"
+                        >{{ newObject.object }}</label
+                    >
+                </div>
+                <div class="mb-3">
+                    <button
+                        class="btn btn-primary d-block mx-auto"
+                        style="background-color: #0096ff; margin-top: -6px"
+                        @click="addItemWithCustomColor"
+                    >
+                        Add
+                    </button>
                 </div>
             </div>
         </div>
@@ -229,7 +229,7 @@ body {
     margin-left: 10px;
 }*/
 
-.btn-ambu {
+.btn-ehbo {
     background-color: #ffa500;
 }
 
@@ -262,7 +262,6 @@ body {
 
 <script>
 export default {
-    name: "ObjectForm",
     data() {
         return {
             tableHeight: "390px",
