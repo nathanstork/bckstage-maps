@@ -4,7 +4,7 @@ import { computed, toRaw, watch } from "vue";
 import store from "@/store";
 import { supabase } from "@/lib/supabaseClient";
 import router from "@/router";
-import { useQueryClient, useMutation } from "vue-query";
+import { useQueryClient, useMutation } from "@tanstack/vue-query";
 
 const { data, error, isLoading } = useEventsQuery();
 const user = computed(() => {
