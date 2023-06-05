@@ -42,7 +42,7 @@ const setMapLoaded = () => (mapLoaded.value = true);
                 <LoadingView v-if="!eventData || !mapLoaded" />
                 <EventMap v-if="!mapIsLoading && mapData" :map="mapData" :onLoaded="setMapLoaded" />
             </div>
-            <div class="col-2">
+            <div class="col-2" style="margin-top: 30px">
                 <objectform style="position: absolute"></objectform>
             </div>
         </div>
