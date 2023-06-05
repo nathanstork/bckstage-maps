@@ -9,9 +9,11 @@ import withUUID from "vue-uuid";
 import DateFormat from "@voidsolutions/vue-dateformat";
 
 import "./assets/main.css";
+import store from "@/store";
 
 withUUID(createApp(App))
     .use(router)
+    .use(store)
     .use(BootstrapIconsPlugin)
     .use(VueQueryPlugin)
     .use(vueClickOutsideElement)

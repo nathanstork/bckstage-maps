@@ -139,7 +139,7 @@ watch(lockMap, newValue => {
     <div
         :key="componentKey"
         id="panzoomContainer"
-        class="overflow-hidden min-vw-100 min-vh-100 bg-dark"
+        class="overflow-hidden min-vw-80 min-vh-100 bg-dark"
         @contextmenu="onContextMenu"
     >
         <div ref="panzoomContent" class="d-inline-block">

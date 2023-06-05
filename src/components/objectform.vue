@@ -76,6 +76,7 @@
                             style="width: 85px; font-size: 15px"
                             @blur="updateItem(itemIndex, 'object')"
                             class="text-center form-control"
+                            disabled
                         />
                     </td>
                     <td class="border-2 p-2 text-center">
@@ -85,19 +86,20 @@
                             @blur="updateItem(itemIndex, 'zone')"
                             class="text-center form-control"
                             style="width: 55px; font-size: 14px"
+                            disabled
                         />
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="buttons" v-if="!isTableExpanded">
+    <div class="buttons" v-if="!isTableExpanded" style="margin-top: -70px">
         <button
             type="button"
-            class="btn btn-ambu"
-            @click="addItemWithColor('Ambu', '#FFA500', 'deleteAmbu')"
+            class="btn btn-ehbo"
+            @click="addItemWithColor('EHBO', '#FFA500', 'deleteEHBO')"
         >
-            Ambu
+            EHBO
         </button>
         <button
             type="button"
@@ -132,33 +134,14 @@
                         type="text"
                         id="object-input"
                         v-model="newObject.object"
+                        @keypress="handleKeyPress"
                     />
-                </div>
-                <div class="mb-3">
-                    <label for="color-select" class="form-label">Label:</label>
-                    <select
-                        class="form-select"
-                        id="color-select"
-                        v-model="newObject.color"
-                        @change="updateColor"
-                    >
-                        <option value="">Choose Label</option>
-                        <option
-                            v-for="(color, index) in colorList"
-                            :value="color.value"
-                            :key="index"
-                        >
-                            {{ color.name }}
-                        </option>
-                    </select>
                 </div>
                 <div class="mb-3">
                     <label
                         class="d-block text-center mb-2 text-light"
                         :style="{
-                            backgroundColor: newObject.color,
                             color: 'black',
-                            padding: '5px',
                             width: '187px',
                             margin: '0 auto',
                             textAlign: 'center'
@@ -169,7 +152,7 @@
                 <div class="mb-3">
                     <button
                         class="btn btn-primary d-block mx-auto"
-                        style="background-color: #0096ff; margin-top: -6px"
+                        style="background-color: #0096ff; margin-top: 30px; padding: "
                         @click="addItemWithCustomColor"
                     >
                         Add
@@ -223,13 +206,13 @@ body {
 }
 
 /* Easy Add Section*/
-/*.btn {
+.btn {
     width: 190px;
     margin-bottom: 5px;
-    margin-left: 10px;
-}*/
+    margin-left: -1px;
+}
 
-.btn-ambu {
+.btn-ehbo {
     background-color: #ffa500;
 }
 
@@ -246,9 +229,10 @@ body {
 }
 
 .customscreen {
-    width: 190px;
-    height: 250px;
-    margin-left: 10px;
+    width: 192px;
+    height: 200px;
+    margin-top: -10px;
+    margin-left: 9px;
 }
 
 .collapse {
@@ -328,17 +312,15 @@ export default {
             }
         },
         addItemWithCustomColor() {
-            if (this.newObject.object !== "" && this.newObject.color !== "") {
-                const newItem = {
-                    object: this.newObject.object,
-                    zone: "",
-                    color: this.newObject.color,
-                    id: Math.random().toString(36).substr(2, 9)
-                };
-                this.items.push(newItem);
-                this.newObject.object = "";
-                this.newObject.color = "";
-            }
+            const newItem = {
+                object: this.newObject.object,
+                zone: "",
+                color: "#00ff77",
+                id: Math.random().toString(36).substr(2, 9)
+            };
+            this.items.push(newItem);
+            this.newObject.object = "";
+            this.newObject.color = "";
         },
 
         deleteItem(itemIndex, event) {
@@ -365,6 +347,12 @@ export default {
                 }
             }
         },
+        handleKeyPress(event) {
+            if (event.key === "Enter" && this.newObject.object.trim() !== "") {
+                this.addItemWithCustomColor();
+            }
+        },
+
         dragStart(itemIndex, event) {
             event.dataTransfer.setData("text/plain", itemIndex);
         },

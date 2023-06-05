@@ -6,6 +6,7 @@ import Layout from "@/components/EventLayout.vue";
 import LoadingView from "@/views/LoadingView.vue";
 import EventMap from "@/components/EventMap.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
+import objectform from "@/components/objectform.vue";
 
 const props = defineProps({
     id: {
@@ -36,7 +37,14 @@ const setMapLoaded = () => (mapLoaded.value = true);
         v-if="!eventIsLoading && eventData && !(eventError || mapError)"
         :title="eventData.name"
     >
-        <LoadingView v-if="!eventData || !mapLoaded" />
-        <EventMap v-if="!mapIsLoading && mapData" :map="mapData" :onLoaded="setMapLoaded" />
+        <div class="row">
+            <div class="col-10">
+                <LoadingView v-if="!eventData || !mapLoaded" />
+                <EventMap v-if="!mapIsLoading && mapData" :map="mapData" :onLoaded="setMapLoaded" />
+            </div>
+            <div class="col-2" style="margin-top: 30px">
+                <objectform style="position: absolute"></objectform>
+            </div>
+        </div>
     </Layout>
 </template>

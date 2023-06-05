@@ -13,9 +13,6 @@ const props = defineProps({
     }
 });
 
-const user = computed(() => {
-    return store.state.user;
-});
 const event = computed(() => {
     return store.state.event;
 });
@@ -27,8 +24,7 @@ const { data, error, isLoading } = eventQuery;
 const mapMutation = useMapMutation(props.id);
 
 watch([data, error, isLoading], newValue => {
-    // console.log(newValue[0]['data']);
-    store.state.event = toRaw(newValue[0]["data"]);
+    store.state.event = toRaw(newValue[0]);
     store.state.event.starts_at = moment(String(store.state.event.starts_at)).format(
         "YYYY-MM-DDTkk:mm"
     );
