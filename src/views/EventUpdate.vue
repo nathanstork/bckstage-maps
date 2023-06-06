@@ -56,17 +56,18 @@ function Save() {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container" style="margin-top: 30px">
         <div class="row">
-            <div class="col-3">
-                <h1 class="text-2xl font-semibold">Edit event</h1>
-                <button @click.prevent="Back" class="btn btn-outline-primary">Back</button>
+            <div class="col-12">
+                <h1 class="text-2xl font-semibold" style="padding-bottom: 60px; text-align: center">
+                    Edit event
+                </h1>
             </div>
         </div>
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-6">
                 <form>
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 10px">
                         <label for="name">Event name</label>
                         <input
                             type="text"
@@ -78,7 +79,10 @@ function Save() {
                         />
                     </div>
 
-                    <div class="form-group pmd-textfield pmd-textfield-floating-label">
+                    <div
+                        class="form-group pmd-textfield pmd-textfield-floating-label"
+                        style="margin-bottom: 10px"
+                    >
                         <label class="control-label">Start Date and Time</label>
                         <input
                             class="form-control"
@@ -91,7 +95,10 @@ function Save() {
                             required
                         />
                     </div>
-                    <div class="form-group pmd-textfield pmd-textfield-floating-label">
+                    <div
+                        class="form-group pmd-textfield pmd-textfield-floating-label"
+                        style="margin-bottom: 10px"
+                    >
                         <label class="control-label">End Date and Time</label>
                         <input
                             class="form-control"
@@ -103,7 +110,10 @@ function Save() {
                             required
                         />
                     </div>
-                    <div class="form-group pmd-textfield pmd-textfield-floating-label">
+                    <div
+                        class="form-group pmd-textfield pmd-textfield-floating-label"
+                        style="margin-bottom: 10px"
+                    >
                         <label class="control-label">Map</label>
                         <div class="d-flex">
                             <input class="form-control" type="file" id="mapFile" />
@@ -113,7 +123,14 @@ function Save() {
                         </div>
                     </div>
 
-                    <div class="form-group pt-4">
+                    <div class="form-group pt-4 text-center">
+                        <button
+                            @click.prevent="Back"
+                            class="btn btn-outline-primary"
+                            style="margin-right: 20px"
+                        >
+                            Back
+                        </button>
                         <button @click.prevent="Save" class="btn btn-primary">Save</button>
                     </div>
                 </form>
