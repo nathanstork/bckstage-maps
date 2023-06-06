@@ -21,7 +21,12 @@
     <!--                </div>-->
 
     <!--                <div class="col-2">-->
-    <button v-if="isLoggedIn" @click.prevent="signOut('test')" class="btn btn-outline-primary">
+    <button
+        v-if="isLoggedIn"
+        @click.prevent="signOut('test')"
+        class="btn btn-outline-primary"
+        style="margin: 10px 0px 0px 10px; width: 140px"
+    >
         Log out
     </button>
     <!--                </div>-->
