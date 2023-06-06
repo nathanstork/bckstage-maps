@@ -2,7 +2,7 @@
     <button
         @click.prevent="signIn"
         class="btn btn-primary btn-lg"
-        style="background-color: #212528; font-size: 1.2rem"
+        style="background-color: #212528; font-size: 1.2rem; width: 240px"
     >
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,10 @@
     </button>
     <br />
     <br />
-    <button class="btn btn-primary btn-lg" style="background-color: #3c7eee; font-size: 1.2rem">
+    <button
+        class="btn btn-primary btn-lg"
+        style="background-color: #3c7eee; font-size: 1.2rem; width: 240px"
+    >
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="30"
