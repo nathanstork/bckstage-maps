@@ -180,86 +180,6 @@
     </div>
 </template>
 
-<style>
-body {
-    overflow: hidden;
-}
-
-/*Body moet toegevoegd worden aan normale main.css dit vanwege scrollbar die ik krijg door collapse menu. kan dit niet wijzigen */
-
-.table-container {
-    width: 188px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    margin-left: 30px;
-    font-size: 20px;
-    transition: height 0.2s ease-out;
-}
-
-.table-container.full-height {
-    height: 100vh;
-}
-
-.eyeopen {
-    margin-left: 187px;
-    cursor: pointer;
-}
-
-.form-control {
-    border-radius: 0px 0px 0px 0px;
-}
-
-.objecttext h2 {
-    font-size: 20px;
-}
-
-.newObject {
-    color: white;
-}
-
-.buttons {
-    margin-top: 10px;
-    margin-left: 20px;
-}
-
-/* Easy Add Section*/
-/*.btn {
-    width: 190px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-}*/
-
-.btn-ambu {
-    background-color: #ffa500;
-}
-
-.btn-als {
-    background-color: #ff00df;
-}
-
-.btn-ibt {
-    background-color: #00ffff;
-}
-
-.btn-custom {
-    background-color: #00ff77;
-}
-
-.customscreen {
-    width: 190px;
-    height: 250px;
-    margin-left: 10px;
-}
-
-.collapse {
-    transition: height 0.2s ease-out;
-}
-
-.collapse-up {
-    transform: translateY(-118%);
-}
-</style>
-
 <script>
 export default {
     data() {
@@ -274,16 +194,7 @@ export default {
                 color: "",
                 popupNumber: ""
             },
-            colorList: [
-                { name: "Blue", value: "#00FFFF" },
-                { name: "Orange", value: "#FFA500" },
-                { name: "Purple", value: "#F600FF" },
-                { name: "Green", value: "#00FF2B" },
-                { name: "Yellow", value: "#F7FF00" },
-                { name: "Red", value: "#FF0000" }
-            ],
             items: Array.from({ length: 12 }, () => ({ object: "", zone: "", color: "" })),
-
             filterText: "",
             popupVisible: false,
             popupInput: ""
@@ -297,6 +208,16 @@ export default {
         document.removeEventListener("click", this.handleOutsideClick);
     },
     computed: {
+        colorList() {
+            return [
+                { name: "Blue", value: "#00FFFF" },
+                { name: "Orange", value: "#FFA500" },
+                { name: "Purple", value: "#F600FF" },
+                { name: "Green", value: "#00FF2B" },
+                { name: "Yellow", value: "#F7FF00" },
+                { name: "Red", value: "#FF0000" }
+            ];
+        },
         filteredItems() {
             return this.items.filter(item => {
                 return item.object.toLowerCase().includes(this.filterText.toLowerCase());
@@ -391,3 +312,83 @@ export default {
     }
 };
 </script>
+
+<style>
+body {
+    overflow: hidden;
+}
+
+/*Body moet toegevoegd worden aan normale main.css dit vanwege scrollbar die ik krijg door collapse menu. kan dit niet wijzigen */
+
+.table-container {
+    width: 188px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-left: 30px;
+    font-size: 20px;
+    transition: height 0.2s ease-out;
+}
+
+.table-container.full-height {
+    height: 100vh;
+}
+
+.eyeopen {
+    margin-left: 187px;
+    cursor: pointer;
+}
+
+.form-control {
+    border-radius: 0px 0px 0px 0px;
+}
+
+.objecttext h2 {
+    font-size: 20px;
+}
+
+.newObject {
+    color: white;
+}
+
+.buttons {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+/* Easy Add Section*/
+/*.btn {
+    width: 190px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}*/
+
+.btn-ambu {
+    background-color: #ffa500;
+}
+
+.btn-als {
+    background-color: #ff00df;
+}
+
+.btn-ibt {
+    background-color: #00ffff;
+}
+
+.btn-custom {
+    background-color: #00ff77;
+}
+
+.customscreen {
+    width: 190px;
+    height: 250px;
+    margin-left: 10px;
+}
+
+.collapse {
+    transition: height 0.2s ease-out;
+}
+
+.collapse-up {
+    transform: translateY(-118%);
+}
+</style>

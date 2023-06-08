@@ -21,7 +21,7 @@
     <!--                </div>-->
 
     <!--                <div class="col-2">-->
-    <button v-if="isLoggedIn" @click.prevent="signOut('test')" class="btn btn-outline-primary">
+    <button v-if="isLoggedIn" @click.prevent="signOut()" class="btn btn-outline-primary">
         Log out
     </button>
     <!--                </div>-->
@@ -36,6 +36,44 @@
         <router-view />
     </main>
 </template>
+
+<script>
+import { supabase } from "@/lib/supabaseClient";
+import { computed, onMounted } from "vue";
+import CogIcon from "./components/Gearsettings.vue";
+import objectzone from "./components/objectform.vue";
+import EasyAdd from "@/components/EasyAdd.vue";
+import { useStore } from "vuex";
+
+export default {
+    components: {
+        CogIcon,
+        EasyAdd,
+        objectzone
+    },
+    setup() {
+        const store = useStore();
+
+        const signOut = () => {
+            store.dispatch("signOutAction");
+        };
+
+        onMounted(async () => {
+            const { data, error } = await supabase.auth.refreshSession();
+            // store.commit("setUser", data.user);
+        });
+
+        const isLoggedIn = () => {
+            return store.getters.getUser !== null;
+        };
+
+        return {
+            signOut,
+            isLoggedIn
+        };
+    }
+};
+</script>
 
 <style>
 .image-container {
@@ -63,39 +101,3 @@
     pointer-events: auto;
 }
 </style>
-
-<script>
-import { supabase } from "@/lib/supabaseClient";
-import { onMounted } from "vue";
-import CogIcon from "./components/Gearsettings.vue";
-import objectzone from "./components/objectform.vue";
-import store from "@/store";
-import EasyAdd from "@/components/EasyAdd.vue";
-
-export default {
-    components: {
-        CogIcon,
-        EasyAdd,
-        objectzone
-    },
-    computed: {
-        isLoggedIn() {
-            return store.state.user !== null;
-        }
-    },
-    setup() {
-        const signOut = ({ id }) => {
-            console.log(id);
-            store.dispatch("signOutAction");
-        };
-
-        onMounted(async () => {
-            const { data, error } = await supabase.auth.refreshSession();
-            store.commit("setUser", data.user);
-        });
-        return {
-            signOut
-        };
-    }
-};
-</script>

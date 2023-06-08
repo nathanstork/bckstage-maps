@@ -7,13 +7,12 @@ import vueClickOutsideElement from "vue-click-outside-element";
 import withUUID from "vue-uuid";
 // @ts-ignore
 import DateFormat from "@voidsolutions/vue-dateformat";
-
-import "./assets/main.css";
 import store from "@/store";
+import "./assets/main.css";
 
 withUUID(createApp(App))
-    .use(router)
     .use(store)
+    .use(router)
     .use(BootstrapIconsPlugin)
     .use(VueQueryPlugin)
     .use(vueClickOutsideElement)

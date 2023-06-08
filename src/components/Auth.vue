@@ -1,6 +1,6 @@
 <template>
     <button
-        @click.prevent="signIn"
+        @click.prevent="handleSignIn"
         class="btn btn-primary btn-lg"
         style="background-color: #212528; font-size: 1.2rem"
     >
@@ -38,24 +38,44 @@
 </template>
 
 <script>
-import store from "@/store";
+import { useStore } from "vuex";
+import { computed, watchEffect } from "vue";
+import { supabase } from "@/lib/supabaseClient";
+import { useMutation } from "@tanstack/vue-query";
 
 export default {
     setup() {
-        const userEmail = store.state.user;
-
-        const signIn = () => {
-            store.dispatch("signInAction");
-        };
-        return {
-            signIn,
-            userEmail
-        };
-    },
-    computed: {
-        user() {
+        const store = useStore();
+        const user = computed(() => {
             return store.state.user;
-        }
+        });
+        // Definieer de OAuth-aanmelding mutatie
+        const signInMutation = useMutation(
+            async () => await supabase.auth.signInWithOAuth({ provider: "github" })
+        );
+
+        // Monitor de mutatiestatus en update de gebruiker wanneer de mutatie is voltooid
+        watchEffect(() => {
+            if (signInMutation.isSuccess) {
+                const { data, error } = signInMutation;
+
+                // Werk de gebruiker bij
+                // user.value = data;
+
+                // Roep de signIn-mutatie aan om de gebruiker bij te werken in de Vuex-store
+                // store.commit('signIn', { user: data });
+            }
+        });
+
+        // Handler voor het starten van de OAuth-aanmelding
+        const handleSignIn = () => {
+            signInMutation.mutate();
+        };
+
+        return {
+            user,
+            handleSignIn
+        };
     }
 };
 </script>

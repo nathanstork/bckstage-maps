@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, toRaw, watch } from "vue";
 import { useEventQuery } from "@/queries/event";
-import store from "../store";
+import store from "@/store";
 import router from "@/router";
 import moment from "moment";
 import { useMapMutation } from "@/mutations/map";
 
+store.dispatch("notAuthenticatedToHome");
 const props = defineProps({
     id: {
         type: String,

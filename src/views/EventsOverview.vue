@@ -1,11 +1,13 @@
 <script setup>
 import { useEventsQuery } from "@/queries/events";
 import { computed, toRaw, watch } from "vue";
-import store from "@/store";
 import { supabase } from "@/lib/supabaseClient";
 import router from "@/router";
 import { useQueryClient, useMutation } from "@tanstack/vue-query";
+import { useStore } from "vuex";
 
+const store = useStore();
+store.dispatch("notAuthenticatedToHome");
 const { data, error, isLoading } = useEventsQuery();
 const user = computed(() => {
     return store.state.user;
@@ -55,7 +57,6 @@ const queryClient = useQueryClient();
 
 const mutation = useMutation({
     mutationFn: async eventId => {
-        console.log(eventId);
         return await supabase.from("events").delete().eq("id", eventId);
     },
     onSuccess: () => {
