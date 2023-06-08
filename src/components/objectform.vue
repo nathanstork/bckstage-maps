@@ -65,9 +65,6 @@
                     class="text-center"
                     @contextmenu.prevent="deleteItem(itemIndex, $event)"
                     draggable="true"
-                    @dragstart="dragStart($event, itemIndex)"
-                    @dragover="dragOver($event)"
-                    @drop="drop($event, itemIndex)"
                 >
                     <td class="border-2 p-2 text-center" :style="{ backgroundColor: item.color }">
                         <input
@@ -95,21 +92,21 @@
         <button
             type="button"
             class="btn btn-ambu"
-            @click="addItemWithColor('Ambu', '#FFA500', 'deleteAmbu')"
+            @click="addItemWithColor('Ambu', '#FFA500', 'circle', props.event_id)"
         >
             Ambu
         </button>
         <button
             type="button"
             class="btn btn-als"
-            @click="addItemWithColor('ALS', '#FF00DF', 'deleteALS')"
+            @click="addItemWithColor('ALS', '#FF00DF', 'triangle', props.event_id)"
         >
             ALS
         </button>
         <button
             type="button"
             class="btn btn-ibt"
-            @click="addItemWithColor('IBT', '#00FFFF', 'deleteIBT')"
+            @click="addItemWithColor('IBT', '#00FFFF', 'square', props.event_id)"
         >
             IBT
         </button>
@@ -131,7 +128,7 @@
                         class="form-control"
                         type="text"
                         id="object-input"
-                        v-model="newObject.object"
+                        v-model="state.newObject.object"
                     />
                 </div>
                 <div class="mb-3">
@@ -139,7 +136,7 @@
                     <select
                         class="form-select"
                         id="color-select"
-                        v-model="newObject.color"
+                        v-model="state.newObject.color"
                         @change="updateColor"
                     >
                         <option value="">Choose Label</option>
@@ -156,14 +153,14 @@
                     <label
                         class="d-block text-center mb-2 text-light"
                         :style="{
-                            backgroundColor: newObject.color,
+                            backgroundColor: state.newObject.color,
                             color: 'black',
                             padding: '5px',
                             width: '187px',
                             margin: '0 auto',
                             textAlign: 'center'
                         }"
-                        >{{ newObject.object }}</label
+                        >{{ state.newObject.object }}</label
                     >
                 </div>
                 <div class="mb-3">
@@ -180,137 +177,133 @@
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            tableHeight: "390px",
-            isTableExpanded: false,
-            showMenu: null,
-            showCustomScreen: false,
-            eyeIcon: "bi-eye",
-            newObject: {
-                object: "",
-                color: "",
-                popupNumber: ""
-            },
-            items: Array.from({ length: 12 }, () => ({ object: "", zone: "", color: "" })),
-            filterText: "",
-            popupVisible: false,
-            popupInput: ""
+<script setup>
+import { computed, reactive, defineProps } from "vue";
+import { useStore } from "vuex";
+import { supabase } from "@/lib/supabaseClient";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+
+const state = reactive({
+    tableHeight: "390px",
+    isTableExpanded: false,
+    showMenu: null,
+    showCustomScreen: false,
+    eyeIcon: "bi-eye",
+    newObject: {
+        object: "",
+        color: "",
+        popupNumber: ""
+    },
+    items: Array.from({ length: 12 }, () => ({ object: "", zone: "", color: "" })),
+    filterText: "",
+    popupVisible: false,
+    popupInput: ""
+});
+
+const props = defineProps({
+    event_id: {
+        type: String,
+        required: true
+    }
+});
+const store = useStore();
+const queryClient = useQueryClient();
+
+console.log(props.event_id);
+const colorList = [
+    { name: "Blue", value: "#00FFFF" },
+    { name: "Orange", value: "#FFA500" },
+    { name: "Purple", value: "#F600FF" },
+    { name: "Green", value: "#00FF2B" },
+    { name: "Yellow", value: "#F7FF00" },
+    { name: "Red", value: "#FF0000" }
+];
+
+const newUnit = computed(() => {
+    return store.state.newUnit;
+});
+
+const filteredItems = computed(() => {
+    return state.items.filter(item => {
+        return item.object.toLowerCase().includes(state.filterText.toLowerCase());
+    });
+});
+
+const expandTable = () => {
+    state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
+    state.isTableExpanded = !state.isTableExpanded;
+    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi bi-eye";
+};
+
+const addItemWithColor = (object, color, unitType, event_id) => {
+    const number = prompt("Please enter a number:");
+    if (number !== null) {
+        newUnit.name = object + " " + number;
+        newUnit.event_id = event_id;
+        newUnit.unit_type = unitType;
+
+        createUnit.mutate(newUnit);
+    }
+};
+
+const createUnit = useMutation({
+    mutationFn: async newUnit => {
+        await supabase.from("units").insert({
+            event_id: newUnit.event_id,
+            name: newUnit.name,
+            type: newUnit.unit_type,
+            x: "A",
+            y: 1
+        });
+    },
+    onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries({ queryKey: ["units"] });
+    }
+});
+
+const addItemWithCustomColor = () => {
+    if (state.newObject.object !== "" && state.newObject.color !== "") {
+        const newItem = {
+            object: state.newObject.object,
+            zone: "",
+            color: state.newObject.color,
+            id: Math.random().toString(36).substr(2, 9)
         };
-    },
+        state.items.push(newItem);
+        state.newObject.object = "";
+        state.newObject.color = "";
+    }
+};
 
-    mounted() {
-        document.addEventListener("click", this.handleOutsideClick);
-    },
-    beforeUnmount() {
-        document.removeEventListener("click", this.handleOutsideClick);
-    },
-    computed: {
-        colorList() {
-            return [
-                { name: "Blue", value: "#00FFFF" },
-                { name: "Orange", value: "#FFA500" },
-                { name: "Purple", value: "#F600FF" },
-                { name: "Green", value: "#00FF2B" },
-                { name: "Yellow", value: "#F7FF00" },
-                { name: "Red", value: "#FF0000" }
-            ];
-        },
-        filteredItems() {
-            return this.items.filter(item => {
-                return item.object.toLowerCase().includes(this.filterText.toLowerCase());
-            });
-        },
-        isTableExpanded() {
-            return this.tableHeight === "80vh";
-        }
-    },
-
-    methods: {
-        expandTable() {
-            this.tableHeight = this.isTableExpanded ? "390px" : "80vh";
-            this.isTableExpanded = !this.isTableExpanded;
-            this.eyeIcon = this.isTableExpanded ? "bi-eye-slash" : "bi bi-eye";
-        },
-
-        addItemWithColor(object, color, deleteName) {
-            const number = prompt("Please enter a number:");
-            if (number !== null) {
-                const item = {
-                    object: object + " " + number,
-                    color: color,
-                    zone: "",
-                    deleteName: deleteName,
-                    id: Math.random().toString(36).substr(2, 9)
-                };
-                this.items.push(item);
-            }
-        },
-        addItemWithCustomColor() {
-            if (this.newObject.object !== "" && this.newObject.color !== "") {
-                const newItem = {
-                    object: this.newObject.object,
-                    zone: "",
-                    color: this.newObject.color,
-                    id: Math.random().toString(36).substr(2, 9)
-                };
-                this.items.push(newItem);
-                this.newObject.object = "";
-                this.newObject.color = "";
-            }
-        },
-
-        deleteItem(itemIndex, event) {
-            event.preventDefault();
-            const itemToDelete = this.filteredItems.slice().reverse()[itemIndex];
-            const idToDelete = itemToDelete.id;
-            const indexToDelete = this.items.findIndex(item => item.id === idToDelete);
-            if (indexToDelete >= 0) {
-                if (
-                    confirm(
-                        `Are you sure you want to delete "${this.items[indexToDelete].object}"?`
-                    )
-                ) {
-                    this.items.splice(indexToDelete, 1);
-                }
-            }
-        },
-        handleOutsideClick(event) {
-            const customScreen = this.$refs.customscreen;
-            if (!customScreen.contains(event.target)) {
-                const customScreenCollapse = customScreen.closest(".collapse");
-                if (customScreenCollapse.classList.contains("show")) {
-                    customScreenCollapse.classList.remove("show");
-                }
-            }
-        },
-        dragStart(itemIndex, event) {
-            event.dataTransfer.setData("text/plain", itemIndex);
-        },
-        dragOver(event) {
-            event.preventDefault();
-        },
-        drop(itemIndex, event) {
-            event.preventDefault();
-            let draggedIndex = event.dataTransfer.getData("text/plain");
-            let draggedItem = this.items[draggedIndex];
-            this.items.splice(draggedIndex, 1);
-            this.items.splice(itemIndex, 0, draggedItem);
-        },
-        updateItem(index, key) {
-            this.items[index][key] = event.target.value;
-        },
-        showPopup() {
-            this.popupNumber = "";
-            const number = prompt("Please enter a number:");
-            if (number !== null) {
-                this.popupNumber = number;
-            }
+const deleteItem = (itemIndex, event) => {
+    event.preventDefault();
+    const itemToDelete = filteredItems.value.slice().reverse()[itemIndex];
+    const idToDelete = itemToDelete.id;
+    const indexToDelete = state.items.findIndex(item => item.id === idToDelete);
+    if (indexToDelete >= 0) {
+        if (confirm(`Are you sure you want to delete "${state.items[indexToDelete].object}"?`)) {
+            state.items.splice(indexToDelete, 1);
         }
     }
 };
+
+const handleOutsideClick = event => {
+    const customScreen = document.getElementById("customscreen");
+    if (!customScreen.contains(event.target)) {
+        const customScreenCollapse = customScreen.closest(".collapse");
+        if (customScreenCollapse.classList.contains("show")) {
+            customScreenCollapse.classList.remove("show");
+        }
+    }
+};
+
+const updateItem = (index, key) => {
+    state.items[index][key] = event.target.value;
+};
+
+document.addEventListener("click", handleOutsideClick);
+document.removeEventListener("click", handleOutsideClick);
 </script>
 
 <style>

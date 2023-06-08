@@ -18,7 +18,8 @@ const store = createStore({
             },
             newUnit: {
                 name: "",
-                event_id: ""
+                event_id: "",
+                unit_type: ""
             },
             events: []
         };
@@ -78,17 +79,20 @@ const store = createStore({
                 .eq("id", event.id);
             if (error) throw error;
             await router.push("/events");
-        },
-        async unitCreate() {
-            let newUnit = store.state.newUnit;
-            const { data, error } = await supabase.from("units").insert({
-                event_id: newUnit.event_id,
-                name: newUnit.name,
-                x: "A",
-                y: 1
-            });
-            if (error) throw error;
         }
+        // async unitCreate() {
+        //     let newUnit = store.state.newUnit;
+        //     console.log(newUnit);
+        //     console.log(newUnit.event_id);
+        //     const { data, error } = await supabase.from("units").insert({
+        //         event_id: newUnit.event_id,
+        //         name: newUnit.name,
+        //         type: newUnit.unit_type,
+        //         x: "A",
+        //         y: 1
+        //     });
+        //     if (error) throw error;
+        // }
     }
 });
 
