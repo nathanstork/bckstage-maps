@@ -125,6 +125,9 @@
         >
             Custom [+]
         </button>
+        <div>
+            <p style="font-size: 22px; font-weight: bold; margin-top: -3px">{{ currentTime }}</p>
+        </div>
         <div class="collapse collapse-up" id="customscreen" ref="customscreen">
             <div class="customscreen bg-dark text-light" ref="customscreen">
                 <div class="mb-3">
@@ -231,12 +234,12 @@ body {
 .customscreen {
     width: 192px;
     height: 200px;
-    margin-top: -10px;
+    margin-top: -60px;
     margin-left: 9px;
 }
 
 .collapse {
-    transition: height 0.2s ease-out;
+    transition: height 0.5s ease-out;
 }
 
 .collapse-up {
@@ -248,10 +251,11 @@ body {
 export default {
     data() {
         return {
-            tableHeight: "390px",
+            tableHeight: "370px",
             isTableExpanded: false,
             showMenu: null,
             showCustomScreen: false,
+            currentTime: "",
             eyeIcon: "bi-eye",
             newObject: {
                 object: "",
@@ -276,6 +280,8 @@ export default {
 
     mounted() {
         document.addEventListener("click", this.handleOutsideClick);
+        this.updateTime();
+        setInterval(this.updateTime, 1000);
     },
     beforeUnmount() {
         document.removeEventListener("click", this.handleOutsideClick);
@@ -287,13 +293,13 @@ export default {
             });
         },
         isTableExpanded() {
-            return this.tableHeight === "80vh";
+            return this.tableHeight === "75vh";
         }
     },
 
     methods: {
         expandTable() {
-            this.tableHeight = this.isTableExpanded ? "390px" : "80vh";
+            this.tableHeight = this.isTableExpanded ? "370px" : "75vh";
             this.isTableExpanded = !this.isTableExpanded;
             this.eyeIcon = this.isTableExpanded ? "bi-eye-slash" : "bi bi-eye";
         },
@@ -351,6 +357,10 @@ export default {
             if (event.key === "Enter" && this.newObject.object.trim() !== "") {
                 this.addItemWithCustomColor();
             }
+        },
+        updateTime() {
+            const now = new Date();
+            this.currentTime = now.toLocaleTimeString();
         },
 
         dragStart(itemIndex, event) {
