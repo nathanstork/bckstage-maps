@@ -9,7 +9,7 @@
                     <p class="lead2 fade-in">{{ word }}</p>
                 </div>
                 <div class="image-container">
-                    <img src="src/assets/10077.png" alt="BckstageMaps" />
+                    <img src="src/assets/BckstageMAPS_Logoblack .png" alt="BckstageMaps" />
                 </div>
             </div>
             <div
@@ -100,8 +100,9 @@
 }
 
 .image-container img {
-    width: 500px;
-    left: 10rem;
+    width: 700px;
+    margin-top: 50px;
+    left: 4rem;
     animation: fadeInAnimation 2s ease-in forwards;
     opacity: 0;
 }

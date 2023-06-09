@@ -25,7 +25,7 @@
         v-if="isLoggedIn"
         @click.prevent="signOut('test')"
         class="btn btn-outline-primary"
-        style="margin: 10px 0px 0px 10px; width: 140px"
+        style="margin: 10px 0px 0px 10px; width: 140px; z-index: 5"
     >
         Log out
     </button>

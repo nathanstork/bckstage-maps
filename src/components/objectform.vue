@@ -50,11 +50,6 @@
                             <h2>Objects</h2>
                         </div>
                     </th>
-                    <th class="border-2 p-2 text-center">
-                        <div class="objecttext" style="color: white; margin-bottom: -10px">
-                            <h2>Zone</h2>
-                        </div>
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -73,19 +68,9 @@
                         <input
                             type="text"
                             v-model="item.object"
-                            style="width: 85px; font-size: 15px"
+                            style="width: 100px; font-size: 15px; margin-left: 30px"
                             @blur="updateItem(itemIndex, 'object')"
                             class="text-center form-control"
-                            disabled
-                        />
-                    </td>
-                    <td class="border-2 p-2 text-center">
-                        <input
-                            type="text"
-                            v-model="item.zone"
-                            @blur="updateItem(itemIndex, 'zone')"
-                            class="text-center form-control"
-                            style="width: 55px; font-size: 14px"
                             disabled
                         />
                     </td>
@@ -165,87 +150,6 @@
         </div>
     </div>
 </template>
-
-<style>
-body {
-    overflow: hidden;
-}
-
-/*Body moet toegevoegd worden aan normale main.css dit vanwege scrollbar die ik krijg door collapse menu. kan dit niet wijzigen */
-
-.table-container {
-    width: 188px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    margin-left: 30px;
-    font-size: 20px;
-    transition: height 0.2s ease-out;
-}
-
-.table-container.full-height {
-    height: 100vh;
-}
-
-.eyeopen {
-    margin-left: 187px;
-    cursor: pointer;
-}
-
-.form-control {
-    border-radius: 0px 0px 0px 0px;
-}
-
-.objecttext h2 {
-    font-size: 20px;
-}
-
-.newObject {
-    color: white;
-}
-
-.buttons {
-    margin-top: 10px;
-    margin-left: 20px;
-}
-
-/* Easy Add Section*/
-.btn {
-    width: 190px;
-    margin-bottom: 5px;
-    margin-left: -1px;
-}
-
-.btn-ehbo {
-    background-color: #ffa500;
-}
-
-.btn-als {
-    background-color: #ff00df;
-}
-
-.btn-ibt {
-    background-color: #00ffff;
-}
-
-.btn-custom {
-    background-color: #00ff77;
-}
-
-.customscreen {
-    width: 192px;
-    height: 200px;
-    margin-top: -60px;
-    margin-left: 9px;
-}
-
-.collapse {
-    transition: height 0.5s ease-out;
-}
-
-.collapse-up {
-    transform: translateY(-118%);
-}
-</style>
 
 <script>
 export default {
@@ -363,19 +267,6 @@ export default {
             this.currentTime = now.toLocaleTimeString();
         },
 
-        dragStart(itemIndex, event) {
-            event.dataTransfer.setData("text/plain", itemIndex);
-        },
-        dragOver(event) {
-            event.preventDefault();
-        },
-        drop(itemIndex, event) {
-            event.preventDefault();
-            let draggedIndex = event.dataTransfer.getData("text/plain");
-            let draggedItem = this.items[draggedIndex];
-            this.items.splice(draggedIndex, 1);
-            this.items.splice(itemIndex, 0, draggedItem);
-        },
         updateItem(index, key) {
             this.items[index][key] = event.target.value;
         },
@@ -389,3 +280,84 @@ export default {
     }
 };
 </script>
+
+<style>
+body {
+    overflow: hidden;
+}
+
+/*Body moet toegevoegd worden aan normale main.css dit vanwege scrollbar die ik krijg door collapse menu. kan dit niet wijzigen */
+
+.table-container {
+    width: 188px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-left: 30px;
+    font-size: 20px;
+    transition: height 0.2s ease-out;
+}
+
+.table-container.full-height {
+    height: 100vh;
+}
+
+.eyeopen {
+    margin-left: 187px;
+    cursor: pointer;
+}
+
+.form-control {
+    border-radius: 0px 0px 0px 0px;
+}
+
+.objecttext h2 {
+    font-size: 20px;
+}
+
+.newObject {
+    color: white;
+}
+
+.buttons {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+/* Easy Add Section*/
+.btn {
+    width: 190px;
+    margin-bottom: 5px;
+    margin-left: -1px;
+}
+
+.btn-ehbo {
+    background-color: #ffa500;
+}
+
+.btn-als {
+    background-color: #ff00df;
+}
+
+.btn-ibt {
+    background-color: #00ffff;
+}
+
+.btn-custom {
+    background-color: #00ff77;
+}
+
+.customscreen {
+    width: 192px;
+    height: 200px;
+    margin-top: -60px;
+    margin-left: 9px;
+}
+
+.collapse {
+    transition: height 0.5s ease-out;
+}
+
+.collapse-up {
+    transform: translateY(-118%);
+}
+</style>
