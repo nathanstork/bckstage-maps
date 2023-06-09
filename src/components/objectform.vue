@@ -197,13 +197,13 @@ export default {
             });
         },
         isTableExpanded() {
-            return this.tableHeight === "75vh";
+            return this.tableHeight === "79vh";
         }
     },
 
     methods: {
         expandTable() {
-            this.tableHeight = this.isTableExpanded ? "370px" : "75vh";
+            this.tableHeight = this.isTableExpanded ? "370px" : "79vh";
             this.isTableExpanded = !this.isTableExpanded;
             this.eyeIcon = this.isTableExpanded ? "bi-eye-slash" : "bi bi-eye";
         },
