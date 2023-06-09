@@ -78,6 +78,9 @@
             </tbody>
         </table>
     </div>
+    <div class="current-time">
+        <p style="font-size: 22px; font-weight: bold">{{ currentTime }}</p>
+    </div>
     <div class="buttons" v-if="!isTableExpanded" style="margin-top: -70px">
         <button
             type="button"
@@ -110,9 +113,6 @@
         >
             Custom [+]
         </button>
-        <div>
-            <p style="font-size: 22px; font-weight: bold; margin-top: -3px">{{ currentTime }}</p>
-        </div>
         <div class="collapse collapse-up" id="customscreen" ref="customscreen">
             <div class="customscreen bg-dark text-light" ref="customscreen">
                 <div class="mb-3">
@@ -349,7 +349,7 @@ body {
 .customscreen {
     width: 192px;
     height: 200px;
-    margin-top: -60px;
+    margin-top: -10px;
     margin-left: 9px;
 }
 
@@ -359,5 +359,11 @@ body {
 
 .collapse-up {
     transform: translateY(-118%);
+}
+
+.current-time {
+    position: fixed;
+    bottom: -12px;
+    right: 70px;
 }
 </style>
