@@ -9,7 +9,7 @@
                     <p class="lead2 fade-in">{{ word }}</p>
                 </div>
                 <div class="image-container">
-                    <img src="src/assets/BckstageMAPS_Logoblack .png" alt="BckstageMaps" />
+                    <img src="src/assets/BckstageMAPS_Logowhite_.png" alt="BckstageMaps" />
                 </div>
             </div>
             <div
