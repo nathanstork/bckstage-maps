@@ -1,7 +1,11 @@
 import { useQuery } from "@tanstack/vue-query";
 import { supabase } from "@/lib/supabaseClient";
+import type { EventDto } from "@/queries/event";
 
 export const useEventsQuery = () =>
-    useQuery(["events"], () => {
-        return supabase.from("events").select("*");
+    useQuery(["events"], async () => {
+        return supabase
+            .from("events")
+            .select("*")
+            .then(res => res.data as EventDto[]);
     });
