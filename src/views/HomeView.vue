@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="buttons mt-5">
-                    <Auth />
+                    <AuthForm />
                 </div>
             </div>
         </div>
@@ -35,13 +35,13 @@
 </template>
 
 <script>
-import Auth from "@/components/Auth.vue";
+import AuthForm from "@/components/AuthForm.vue";
 import { ref } from "vue";
 import { useStore } from "vuex";
 
 export default {
     components: {
-        Auth
+        AuthForm: AuthForm
     },
     setup() {
         const store = useStore();
