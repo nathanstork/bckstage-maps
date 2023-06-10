@@ -40,8 +40,8 @@
 <script>
 import { supabase } from "@/lib/supabaseClient";
 import { computed, onMounted } from "vue";
-import CogIcon from "./components/Gearsettings.vue";
-import objectzone from "./components/objectform.vue";
+import CogIcon from "./components/GearSettings.vue";
+import objectzone from "./components/ObjectForm.vue";
 import EasyAdd from "@/components/EasyAdd.vue";
 import { useStore } from "vuex";
 

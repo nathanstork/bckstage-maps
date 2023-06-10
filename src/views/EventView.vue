@@ -6,7 +6,7 @@ import Layout from "@/components/EventLayout.vue";
 import LoadingView from "@/views/LoadingView.vue";
 import EventMap from "@/components/EventMap.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
-import objectform from "@/components/objectform.vue";
+import objectform from "@/components/ObjectForm.vue";
 import { useStore } from "vuex";
 import router from "@/router";
 
