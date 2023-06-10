@@ -1,4 +1,6 @@
 <script setup>
+import { defineProps } from "vue";
+
 const props = defineProps({
     show: {
         type: Boolean,
@@ -50,17 +52,38 @@ const props = defineProps({
                         >
                             Cancel
                         </button>
-                        <button type="button" class="btn btn-primary" @click="props.onConfirm">
+                        <button type="button" class="btn btn-primary" @click="handleConfirm">
                             Confirm
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Backdrop -->
-            <div v-if="show" class="modal-backdrop" style="opacity: 0.5" @click="props.onCancel" />
+            <div
+                v-if="props.show"
+                class="modal-backdrop"
+                style="opacity: 0.5"
+                @click="props.onCancel"
+            />
         </div>
     </transition>
 </template>
+
+<script>
+export default {
+    setup() {
+        const handleConfirm = () => {
+            if (typeof props.onConfirm === "function") {
+                props.onConfirm();
+            }
+        };
+
+        return {
+            handleConfirm
+        };
+    }
+};
+</script>
 
 <style>
 .fade-enter-active,

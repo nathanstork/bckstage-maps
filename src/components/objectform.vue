@@ -113,6 +113,19 @@
         >
             Custom [+]
         </button>
+        <dialog-modal
+            :show="showDialogModal"
+            title="Enter a number"
+            body="Dialog Body"
+            :on-confirm="addItemWithColor"
+            @on-cancel="showDialogModal = false"
+        >
+            <input type="number" id="numberInput" placeholder="Enter a number" />
+            <template v-slot:footer>
+                <button @click="handleNumberInput()">Submit</button>
+                <button @click="showDialogModal = false">Cancel</button>
+            </template>
+        </dialog-modal>
         <div class="collapse collapse-up" id="customscreen" ref="customscreen">
             <div class="customscreen bg-dark text-light" ref="customscreen">
                 <div class="mb-3">
@@ -152,9 +165,14 @@
 </template>
 
 <script>
+import DialogModal from "@/components/DialogModal.vue";
 export default {
+    components: {
+        DialogModal
+    },
     data() {
         return {
+            showDialogModal: false,
             tableHeight: "370px",
             isTableExpanded: false,
             showMenu: null,
@@ -174,7 +192,13 @@ export default {
                 { name: "Yellow", value: "#F7FF00" },
                 { name: "Red", value: "#FF0000" }
             ],
-            items: Array.from({ length: 12 }, () => ({ object: "", zone: "", color: "" })),
+            items: Array.from({ length: 12 }, () => ({
+                object: "",
+                color: "",
+                zone: "",
+                deleteName: "",
+                id: ""
+            })),
 
             filterText: "",
             popupVisible: false,
@@ -209,8 +233,16 @@ export default {
         },
 
         addItemWithColor(object, color, deleteName) {
-            const number = prompt("Please enter a number:");
-            if (number !== null) {
+            this.showDialogModal = true;
+            this.numberInput = "";
+
+            const handleNumberInput = () => {
+                const number = parseInt(this.numberInput);
+                if (isNaN(number)) {
+                    // If the number is not a valid number, return without adding the item
+                    return;
+                }
+
                 const item = {
                     object: object + " " + number,
                     color: color,
@@ -219,7 +251,30 @@ export default {
                     id: Math.random().toString(36).substr(2, 9)
                 };
                 this.items.push(item);
-            }
+
+                // Reset the number input
+                this.numberInput = "";
+
+                // Close the modal
+                this.showDialogModal = false;
+            };
+
+            // Listen for the Enter key press event in the number input field
+            const handleEnterKey = event => {
+                if (event.keyCode === 13) {
+                    handleNumberInput();
+                }
+            };
+
+            // Save the functions as dialog-modal event listeners
+            this.$dialogModal.on("cancel", () => {
+                this.showDialogModal = false;
+                this.$dialogModal.off("confirm", handleNumberInput);
+                this.$dialogModal.off("keyup", handleEnterKey);
+            });
+
+            this.$dialogModal.on("confirm", handleNumberInput);
+            this.$dialogModal.on("keyup", handleEnterKey);
         },
         addItemWithCustomColor() {
             const newItem = {
@@ -269,13 +324,6 @@ export default {
 
         updateItem(index, key) {
             this.items[index][key] = event.target.value;
-        },
-        showPopup() {
-            this.popupNumber = "";
-            const number = prompt("Please enter a number:");
-            if (number !== null) {
-                this.popupNumber = number;
-            }
         }
     }
 };
