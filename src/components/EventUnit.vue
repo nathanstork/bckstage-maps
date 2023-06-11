@@ -39,18 +39,23 @@ watch(y, (newValue, oldValue) => {
 
 <template>
     <div
-        v-if="props.unit?.type === UnitType.CIRCLE"
         ref="movableTarget"
-        class="position-absolute rounded-circle bg-danger"
+        :class="
+            (props.unit?.type === UnitType.CIRCLE &&
+                'position-absolute rounded-circle bg-danger') ||
+            (props.unit?.type === UnitType.SQUARE && 'position-absolute rounded-circle bg-info') ||
+            (props.unit?.type === UnitType.TRIANGLE &&
+                'position-absolute rounded-circle bg-success') ||
+            (props.unit?.type === UnitType.POLYGON && 'position-absolute rounded-circle bg-primary')
+        "
         :style="{
+            top: props.unit?.y + 'px',
+            left: props.unit?.x + 'px',
             width: '2rem',
             height: '2rem',
             zIndex: 1000
         }"
-    ></div>
-    <div v-if="props.unit?.type === UnitType.SQUARE"></div>
-    <div v-if="props.unit?.type === UnitType.TRIANGLE"></div>
-    <div v-if="props.unit?.type === UnitType.POLYGON"></div>
+    />
     <Moveable
         :target="movableTarget"
         :draggable="true"

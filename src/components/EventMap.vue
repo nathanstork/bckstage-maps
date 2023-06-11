@@ -6,10 +6,16 @@ import Panzoom, { PanZoom } from "panzoom";
 import { VuePDF, usePDF } from "@tato30/vue-pdf";
 import ContextMenu from "@/components/ContextMenu.vue";
 import type { ContextMenuItem } from "@/components/ContextMenu.vue";
+import type { UnitDto } from "@/queries/units";
+import EventUnit from "@/components/EventUnit.vue";
 
 const props = defineProps({
     map: {
         type: String,
+        required: true
+    },
+    units: {
+        type: Array<UnitDto>,
         required: true
     },
     onLoaded: {
@@ -151,6 +157,7 @@ watch(lockMap, newValue => {
                 :text-layer="false"
                 @loaded="onPdfLoaded"
             />
+            <EventUnit v-for="unit in props.units" :key="unit.id" :unit="unit" />
         </div>
     </div>
     <ContextMenu
