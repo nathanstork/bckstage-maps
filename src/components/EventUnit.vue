@@ -5,7 +5,6 @@ import Moveable from "vue3-moveable";
 import { ref, watch } from "vue";
 import type { PropType } from "vue";
 import { useUnitMutation } from "@/mutations/unit";
-import { supabase } from "@/lib/supabaseClient";
 
 const props = defineProps({
     unit: {
@@ -21,16 +20,38 @@ const movableTarget = ref(null);
 const x = ref(props.unit.x);
 const y = ref(props.unit.y);
 
+const updates = ref<{ x: number; y: number }[]>([]);
+
 const log = (e: any) => {
     console.log(e);
 };
 
+// Add new coordinates to the updates array
 watch([x, y], async (newValue, oldValue) => {
-    unitMutation.mutate({
+    updates.value.push({
         x: newValue[0],
         y: newValue[1]
     });
 });
+
+// Attempt an update every two seconds
+setInterval(() => {
+    if (updates.value.length === 0) return;
+
+    const updatesSnapshot = [...updates.value];
+
+    // Remove all outdated updates
+    updates.value = updates.value.filter(item => !updatesSnapshot.includes(item));
+
+    const update = updatesSnapshot.pop();
+
+    if (!update) return;
+
+    unitMutation.mutate({
+        x: update.x,
+        y: update.y
+    });
+}, 2000);
 </script>
 
 <template>
