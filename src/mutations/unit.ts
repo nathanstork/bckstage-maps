@@ -6,7 +6,7 @@ export const useUnitMutation = (id: string) => {
     const queryClient = useQueryClient();
 
     return useMutation(
-        async (payload: UnitDto) =>
+        async (payload: Partial<UnitDto>) =>
             new Promise((resolve, reject) => {
                 supabase
                     .from("units")

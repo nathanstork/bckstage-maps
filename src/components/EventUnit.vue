@@ -5,6 +5,7 @@ import Moveable from "vue3-moveable";
 import { ref, watch } from "vue";
 import type { PropType } from "vue";
 import { useUnitMutation } from "@/mutations/unit";
+import { supabase } from "@/lib/supabaseClient";
 
 const props = defineProps({
     unit: {
@@ -17,57 +18,52 @@ const unitMutation = useUnitMutation(props.unit.id);
 
 const movableTarget = ref(null);
 
-const x = ref(0);
-const y = ref(0);
+const x = ref(props.unit.x);
+const y = ref(props.unit.y);
 
-watch(x, (newValue, oldValue) => {
-    unitMutation.mutate({
-        ...props.unit,
-        x: newValue
-    });
-    console.log("x changed from " + oldValue + " to " + newValue);
-});
+const log = (e: any) => {
+    console.log(e);
+};
 
-watch(y, (newValue, oldValue) => {
+watch([x, y], async (newValue, oldValue) => {
     unitMutation.mutate({
-        ...props.unit,
-        y: newValue
+        x: newValue[0],
+        y: newValue[1]
     });
-    console.log("y changed from " + oldValue + " to " + newValue);
 });
 </script>
 
 <template>
-    <div
-        ref="movableTarget"
-        :class="
-            (props.unit?.type === UnitType.CIRCLE &&
-                'position-absolute rounded-circle bg-danger') ||
-            (props.unit?.type === UnitType.SQUARE && 'position-absolute rounded-circle bg-info') ||
-            (props.unit?.type === UnitType.TRIANGLE &&
-                'position-absolute rounded-circle bg-success') ||
-            (props.unit?.type === UnitType.POLYGON && 'position-absolute rounded-circle bg-primary')
-        "
-        :style="{
-            top: props.unit?.y + 'px',
-            left: props.unit?.x + 'px',
-            width: '2rem',
-            height: '2rem',
-            zIndex: 1000
-        }"
-    />
-    <Moveable
-        :target="movableTarget"
-        :draggable="true"
-        :stopPropagation="true"
-        @drag="
-            e => {
-                e.target.style.transform = e.transform;
-                x = e.left;
-                y = e.top;
-            }
-        "
-    />
+    <div>
+        <div
+            ref="movableTarget"
+            :class="
+                'position-absolute' &&
+                ((props.unit?.type === UnitType.CIRCLE && 'rounded-circle bg-danger') ||
+                    (props.unit?.type === UnitType.SQUARE && 'rounded-circle bg-info') ||
+                    (props.unit?.type === UnitType.TRIANGLE && 'rounded-circle bg-success') ||
+                    (props.unit?.type === UnitType.POLYGON && 'rounded-circle bg-primary'))
+            "
+            :style="{
+                transform: 'translate(' + x + 'px, ' + y + 'px)',
+                width: '2rem',
+                height: '2rem',
+                zIndex: 100
+            }"
+        />
+        <Moveable
+            :target="movableTarget"
+            :draggable="true"
+            :stopPropagation="true"
+            @drag="
+                e => {
+                    e.target.style.transform = e.transform;
+                    x = e.translate[0];
+                    y = e.translate[1];
+                }
+            "
+        />
+    </div>
 </template>
 
 <style>
