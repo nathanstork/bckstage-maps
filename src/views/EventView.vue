@@ -9,7 +9,9 @@ import NotFoundView from "@/views/NotFoundView.vue";
 import objectform from "@/components/ObjectForm.vue";
 import { useStore } from "vuex";
 import router from "@/router";
-import { UnitType, useUnitsQuery } from "@/queries/units";
+import { useUnitsQuery } from "@/queries/units";
+import type { UnitDto, UnitType } from "@/queries/units";
+import { supabase } from "@/lib/supabaseClient";
 
 const store = useStore();
 store.dispatch("notAuthenticatedToHome");
@@ -32,6 +34,22 @@ const unitsQuery = useUnitsQuery(props.id);
 const { data: unitsData, isLoading: unitsIsLoading, error: unitsError } = unitsQuery;
 
 const setMapLoaded = () => (mapLoaded.value = true);
+
+supabase
+    .channel(props.id)
+    .on("postgres_changes", { event: "*", schema: "public", table: "units" }, payload => {
+        const newUnit = payload.new as UnitDto;
+        console.log(newUnit);
+
+        if (payload.eventType === "INSERT") {
+            // Add new unit to store
+        }
+
+        if (payload.eventType === "UPDATE") {
+            // Update unit in store
+        }
+    })
+    .subscribe();
 </script>
 
 <template>
