@@ -7,7 +7,11 @@ import LoadingView from "@/views/LoadingView.vue";
 import EventMap from "@/components/EventMap.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import objectform from "@/components/objectform.vue";
+import { useStore } from "vuex";
+import router from "@/router";
 
+const store = useStore();
+store.dispatch("notAuthenticatedToHome");
 const props = defineProps({
     id: {
         type: String,
@@ -43,7 +47,7 @@ const setMapLoaded = () => (mapLoaded.value = true);
                 <EventMap v-if="!mapIsLoading && mapData" :map="mapData" :onLoaded="setMapLoaded" />
             </div>
             <div class="col-2" style="margin-top: 10px">
-                <objectform style="position: absolute"></objectform>
+                <objectform :event_id="eventData.id" style="position: absolute"></objectform>
             </div>
         </div>
     </Layout>

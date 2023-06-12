@@ -74,8 +74,13 @@
 <script>
 import store from "@/store";
 import router from "@/router";
+import { useStore } from "vuex";
 
 export default {
+    setup() {
+        const store = useStore();
+        store.dispatch("notAuthenticatedToHome");
+    },
     data() {
         return {};
     },

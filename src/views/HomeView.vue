@@ -1,4 +1,5 @@
 <template>
+    {{ user }}
     <div class="container-fluid">
         <div class="row">
             <div class="col-7 bg-primary">
@@ -32,6 +33,40 @@
         </div>
     </div>
 </template>
+
+<script>
+import Auth from "@/components/Auth.vue";
+import { ref } from "vue";
+import { useStore } from "vuex";
+
+export default {
+    components: {
+        Auth
+    },
+    setup() {
+        const store = useStore();
+        store.dispatch("fetchUser");
+
+        store.dispatch("authenticatedToEvents");
+
+        const words = ref(["festivals", "events", "competitions"]);
+        const wordIndex = ref(0);
+        const word = ref(words.value[wordIndex.value]);
+
+        const changeWord = () => {
+            wordIndex.value = (wordIndex.value + 1) % words.value.length;
+            word.value = words.value[wordIndex.value];
+        };
+
+        setInterval(changeWord, 2000);
+
+        return {
+            word
+        };
+    }
+};
+</script>
+
 <style>
 .container-fluid {
     padding: 0;
@@ -87,6 +122,7 @@
     margin-top: -1rem;
     font-size: 4rem;
 }
+
 .lead2 {
     left: 7.5rem;
     margin-top: -8.5rem;
@@ -107,46 +143,3 @@
     opacity: 0;
 }
 </style>
-
-<script>
-import Auth from "@/components/Auth.vue";
-import { onMounted, ref } from "vue";
-import { supabase } from "@/lib/supabaseClient";
-import store from "@/store";
-import router from "@/router";
-
-export default {
-    components: {
-        Auth
-    },
-    setup() {
-        const words = ref(["festivals", "events", "competitions"]);
-        const wordIndex = ref(0);
-        const word = ref(words.value[wordIndex.value]);
-
-        const changeWord = () => {
-            wordIndex.value = (wordIndex.value + 1) % words.value.length;
-            word.value = words.value[wordIndex.value];
-        };
-
-        onMounted(async () => {
-            const { data, error } = await supabase.auth.refreshSession();
-            store.commit("setUser", data.user);
-            if (store.state.user !== null || data.user !== null) {
-                router.push("/events");
-            }
-        });
-
-        setInterval(changeWord, 2000);
-
-        return {
-            word
-        };
-    },
-    computed: {
-        user() {
-            return store.state.user;
-        }
-    }
-};
-</script>
