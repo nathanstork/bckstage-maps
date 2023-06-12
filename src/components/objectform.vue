@@ -1,5 +1,5 @@
 <template>
-    <div class="objectzone">
+    <div class="objectzone mt-5">
         <button type="button" class="eyeopen" @click="expandTable">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -50,11 +50,6 @@
                             <h2>Objects</h2>
                         </div>
                     </th>
-                    <th class="border-2 p-2 text-center">
-                        <div class="objecttext" style="color: white; margin-bottom: -10px">
-                            <h2>Zone</h2>
-                        </div>
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -70,18 +65,9 @@
                         <input
                             type="text"
                             v-model="item.object"
-                            style="width: 85px; font-size: 15px"
+                            style="width: 150px; font-size: 15px"
                             @blur="updateItem(itemIndex, 'object')"
                             class="text-center form-control"
-                        />
-                    </td>
-                    <td class="border-2 p-2 text-center">
-                        <input
-                            type="text"
-                            v-model="item.zone"
-                            @blur="updateItem(itemIndex, 'zone')"
-                            class="text-center form-control"
-                            style="width: 55px; font-size: 14px"
                         />
                     </td>
                 </tr>
@@ -194,7 +180,6 @@ const state = reactive({
         color: "",
         popupNumber: ""
     },
-    items: Array.from({ length: 12 }, () => ({ object: "", zone: "", color: "" })),
     filterText: "",
     popupVisible: false,
     popupInput: ""
@@ -224,10 +209,14 @@ const newUnit = computed(() => {
 });
 
 const filteredItems = computed(() => {
-    return state.items.filter(item => {
-        return item.object.toLowerCase().includes(state.filterText.toLowerCase());
-    });
+    return store.state.units;
 });
+
+// const filteredItems = computed(() => {
+//     return items.filter(item => {
+//         return item.object.toLowerCase().includes(state.filterText.toLowerCase());
+//     });
+// });
 
 const expandTable = () => {
     state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
@@ -270,7 +259,7 @@ const addItemWithCustomColor = () => {
             color: state.newObject.color,
             id: Math.random().toString(36).substr(2, 9)
         };
-        state.items.push(newItem);
+        // items.push(newItem);
         state.newObject.object = "";
         state.newObject.color = "";
     }
@@ -280,10 +269,10 @@ const deleteItem = (itemIndex, event) => {
     event.preventDefault();
     const itemToDelete = filteredItems.value.slice().reverse()[itemIndex];
     const idToDelete = itemToDelete.id;
-    const indexToDelete = state.items.findIndex(item => item.id === idToDelete);
+    const indexToDelete = items.findIndex(item => item.id === idToDelete);
     if (indexToDelete >= 0) {
-        if (confirm(`Are you sure you want to delete "${state.items[indexToDelete].object}"?`)) {
-            state.items.splice(indexToDelete, 1);
+        if (confirm(`Are you sure you want to delete "${items[indexToDelete].object}"?`)) {
+            items.splice(indexToDelete, 1);
         }
     }
 };
@@ -298,9 +287,9 @@ const handleOutsideClick = event => {
     }
 };
 
-const updateItem = (index, key) => {
-    state.items[index][key] = event.target.value;
-};
+// const updateItem = (index, key) => {
+//     items[index][key] = event.target.value;
+// };
 
 document.addEventListener("click", handleOutsideClick);
 document.removeEventListener("click", handleOutsideClick);

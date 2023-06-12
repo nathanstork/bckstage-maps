@@ -21,6 +21,7 @@ const store = createStore({
                 event_id: "",
                 unit_type: ""
             },
+            units: Array.from({ length: 12 }, () => ({ object: "", zone: "", color: "" })),
             events: []
         };
     },
