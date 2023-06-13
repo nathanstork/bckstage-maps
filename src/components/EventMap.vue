@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from "vue";
+import type { PropType } from "vue";
 import Panzoom, { PanZoom } from "panzoom";
 // Ignore type errors for import as @tato/vue-pdf is not typed
 // @ts-ignore
@@ -15,7 +16,7 @@ const props = defineProps({
         required: true
     },
     units: {
-        type: Array<UnitDto>,
+        type: Array as PropType<UnitDto[]>,
         required: true
     },
     onLoaded: {

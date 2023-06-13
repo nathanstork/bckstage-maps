@@ -4,8 +4,10 @@ import type { EventDto } from "@/queries/event";
 
 export const useEventsQuery = () =>
     useQuery(["events"], async () => {
-        return supabase
-            .from("events")
-            .select("*")
-            .then(res => res.data as EventDto[]);
+        return supabase.from("events").select("*");
+        /*.then(res => {
+                console.log(res.data);
+
+                return res.data as EventDto[];
+            });*/
     });

@@ -27,7 +27,7 @@ const log = (e: any) => {
 };
 
 // Add new coordinates to the updates array
-watch([x, y], async (newValue, oldValue) => {
+watch([x, y], newValue => {
     updates.value.push({
         x: newValue[0],
         y: newValue[1]

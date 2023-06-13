@@ -22,9 +22,9 @@ export const useUnitMutation = (id: string) => {
                     });
             }),
         {
-            onSuccess: async (data, variables, context) => {
+            /*onSuccess: async (data, variables, context) => {
                 await queryClient.invalidateQueries(["units", variables.event_id]);
-            }
+            }*/
         }
     );
 };
