@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
-import EventsOverview from "@/views/EventsOverview.vue";
-import EventCreate from "@/views/EventCreate.vue";
+import EventsOverview from "@/views/EventsView.vue";
+import EventCreate from "@/views/EventCreateView.vue";
 import NotFound from "@/views/NotFoundView.vue";
 
 const router = createRouter({
@@ -48,7 +48,7 @@ const router = createRouter({
         {
             path: "/event/:id/edit",
             name: "EventUpdate",
-            component: () => import("../views/EventUpdate.vue"),
+            component: () => import("../views/EventUpdateView.vue"),
             meta: {
                 title: "Event Update"
             },

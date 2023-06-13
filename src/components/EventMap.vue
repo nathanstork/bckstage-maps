@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from "vue";
+import type { PropType } from "vue";
 import Panzoom, { PanZoom } from "panzoom";
 // Ignore type errors for import as @tato/vue-pdf is not typed
 // @ts-ignore
 import { VuePDF, usePDF } from "@tato30/vue-pdf";
 import ContextMenu from "@/components/ContextMenu.vue";
 import type { ContextMenuItem } from "@/components/ContextMenu.vue";
+import type { UnitDto } from "@/queries/units";
+import EventUnit from "@/components/EventUnit.vue";
 
 const props = defineProps({
     map: {
         type: String,
+        required: true
+    },
+    units: {
+        type: Array as PropType<UnitDto[]>,
         required: true
     },
     onLoaded: {
@@ -151,6 +158,7 @@ watch(lockMap, newValue => {
                 :text-layer="false"
                 @loaded="onPdfLoaded"
             />
+            <EventUnit v-for="unit in props.units" :key="unit.id" :unit="unit" />
         </div>
     </div>
     <ContextMenu
