@@ -1,5 +1,5 @@
 <template>
-    <div class="objectzone mt-5">
+    <div class="objectzone">
         <button type="button" class="eyeopen" @click="expandTable">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,6 @@
                     :style="{ backgroundColor: item.color }"
                     class="text-center"
                     @contextmenu.prevent="deleteItem(itemIndex, $event)"
-                    draggable="true"
                 >
                     <td class="border-2 p-2 text-center" :style="{ backgroundColor: item.color }">
                         <input
@@ -74,9 +73,6 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="current-time">
-        <p style="font-size: 22px; font-weight: bold">{{ currentTime }}</p>
     </div>
     <div class="buttons" v-if="!isTableExpanded" style="margin-top: -70px">
         <button
@@ -113,7 +109,12 @@
         <div class="collapse collapse-up" id="customscreen" ref="customscreen">
             <div class="customscreen bg-dark text-light" ref="customscreen">
                 <div class="mb-3">
-                    <label for="object-input" class="form-label">Object:</label>
+                    <label
+                        for="object-input"
+                        class="form-label"
+                        style="font-size: 20px; margin-top: 5px"
+                        >Object:</label
+                    >
                     <input
                         class="form-control"
                         type="text"
@@ -145,10 +146,14 @@
                 </div>
             </div>
         </div>
+        <div class="current-time">
+            <p style="font-size: 22px; font-weight: bold" color="white">{{ currentTime }}</p>
+        </div>
     </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { computed, reactive, defineProps } from "vue";
 import { useStore } from "vuex";
 import { supabase } from "@/lib/supabaseClient";
@@ -194,27 +199,35 @@ const newUnit = computed(() => {
 });
 
 const filteredItems = computed(() => {
-    return store.state.units;
+    return store.state.units.filter(item => {
+        return item.object.toLowerCase().includes(state.filterText.toLowerCase());
+    });
 });
 
-// const filteredItems = computed(() => {
-//     return items.filter(item => {
-//         return item.object.toLowerCase().includes(state.filterText.toLowerCase());
-//     });
-// });
+const filteredItemsArray = computed(() => {
+    return filteredItems.value.filter(item => {
+        return item.object.toLowerCase().includes(state.filterText.toLowerCase());
+    });
+});
 
 const expandTable = () => {
     state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
     state.isTableExpanded = !state.isTableExpanded;
-    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi bi-eye";
+    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi-eye";
 };
 
 const addItemWithColor = (object, color, unitType, event_id) => {
     const number = prompt("Please enter a number:");
     if (number !== null) {
-        newUnit.name = object + " " + number;
-        newUnit.event_id = event_id;
-        newUnit.unit_type = unitType;
+        const newItem = {
+            object: object + " " + number,
+            zone: "",
+            color: color,
+            id: Math.random().toString(36).substr(2, 9)
+        };
+
+        store.state.units.push(newItem);
+        state.filterText = "";
 
         createUnit.mutate(newUnit);
     }
@@ -237,16 +250,18 @@ const createUnit = useMutation({
 });
 
 const addItemWithCustomColor = () => {
-    if (state.newObject.object !== "" && state.newObject.color !== "") {
+    if (state.newObject.object !== "") {
         const newItem = {
             object: state.newObject.object,
             zone: "",
-            color: state.newObject.color,
+            color: "#00ff77",
             id: Math.random().toString(36).substr(2, 9)
         };
-        // items.push(newItem);
+
+        store.state.units.push(newItem);
         state.newObject.object = "";
-        state.newObject.color = "";
+
+        createUnit.mutate(newItem);
     }
 };
 
@@ -254,10 +269,14 @@ const deleteItem = (itemIndex, event) => {
     event.preventDefault();
     const itemToDelete = filteredItems.value.slice().reverse()[itemIndex];
     const idToDelete = itemToDelete.id;
-    const indexToDelete = items.findIndex(item => item.id === idToDelete);
+    const indexToDelete = filteredItems.value.findIndex(item => item.id === idToDelete);
     if (indexToDelete >= 0) {
-        if (confirm(`Are you sure you want to delete "${items[indexToDelete].object}"?`)) {
-            items.splice(indexToDelete, 1);
+        if (
+            confirm(
+                `Are you sure you want to delete "${filteredItems.value[indexToDelete].object}"?`
+            )
+        ) {
+            filteredItems.value.splice(indexToDelete, 1);
         }
     }
 };
@@ -271,10 +290,11 @@ const handleOutsideClick = event => {
         }
     }
 };
+const currentTime = new Date().toLocaleTimeString();
 
-// const updateItem = (index, key) => {
-//     items[index][key] = event.target.value;
-// };
+const updateItem = (index, key) => {
+    filteredItems.value[index][key] = event.target.value;
+};
 
 document.addEventListener("click", handleOutsideClick);
 document.removeEventListener("click", handleOutsideClick);
@@ -289,6 +309,7 @@ body {
 
 .table-container {
     width: 188px;
+    height: 360px;
     overflow-y: scroll;
     overflow-x: hidden;
     margin-left: 30px;
@@ -323,13 +344,12 @@ body {
 }
 
 /* Easy Add Section*/
-/*.btn {
+.btn {
     width: 190px;
     margin-bottom: 5px;
-    margin-left: 10px;
-}*/
+}
 
-.btn-ambu {
+.btn-ehbo {
     background-color: #ffa500;
 }
 
@@ -346,7 +366,7 @@ body {
 }
 
 .customscreen {
-    width: 190px;
+    width: 191px;
     height: 250px;
     margin-left: 10px;
 }
