@@ -179,7 +179,6 @@ const props = defineProps({
 const store = useStore();
 const queryClient = useQueryClient();
 
-console.log(props.event_id);
 const colorList = [
     { name: "Blue", value: "#00FFFF" },
     { name: "Orange", value: "#FFA500" },

@@ -27,11 +27,15 @@ const store = createStore({
     },
     getters: {
         getUser: state => state.user,
-        getEvent: state => state.event
+        getEvent: state => state.event,
+        getUnits: state => state.units
     },
     mutations: {
         setUser(state, payload) {
             state.user = payload;
+        },
+        setUnits(state, payload) {
+            state.units = payload;
         }
     },
     actions: {
