@@ -32,7 +32,7 @@
             </svg>
         </button>
     </div>
-    <div class="table-container" :style="{ height: tableHeight }">
+    <div class="table-container" :style="{ height: state.tableHeight }">
         <div class="sticky-top">
             <input
                 class="form-control sticky-top"
@@ -77,7 +77,7 @@
             </tbody>
         </table>
     </div>
-    <div class="buttons" v-if="!isTableExpanded" style="margin-top: -70px">
+    <div class="buttons" v-if="!state.isTableExpanded" style="margin-top: -70px">
         <button
             type="button"
             class="btn btn-ehbo"
@@ -178,10 +178,14 @@ const state = reactive({
     popupInput: "",
     units: Array.from({ length: 12 }, () => ({ name: "", x: "", y: "", color: "" }))
 });
+
+state.isTableExpanded = false;
+
+const eyeIcon = computed(() => (state.isTableExpanded ? "bi-eye-slash" : "bi-eye"));
+
 const expandTable = () => {
-    state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
     state.isTableExpanded = !state.isTableExpanded;
-    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi-eye";
+    state.tableHeight = state.isTableExpanded ? "78vh" : "390px";
 };
 
 const props = defineProps({
@@ -201,12 +205,6 @@ const newUnit = computed(() => {
 
 const filteredUnits = computed(() => {
     return store.state.units.filter(unit => {
-        return unit.object.toLowerCase().includes(state.filterText.toLowerCase());
-    });
-});
-
-const filteredUnitsArray = computed(() => {
-    return filteredUnits.value.filter(unit => {
         return unit.object.toLowerCase().includes(state.filterText.toLowerCase());
     });
 });
