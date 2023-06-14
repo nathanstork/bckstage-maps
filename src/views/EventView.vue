@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, Ref, ref, toRaw, watch } from "vue";
+import { onMounted, ref, toRaw, watch } from "vue";
+import type { Ref } from "vue";
 import { useEventQuery } from "@/queries/event";
 import type { EventDto } from "@/queries/event";
 import { useMapQuery } from "@/queries/map";
