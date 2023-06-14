@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref, toRaw, watch } from "vue";
 import { useEventQuery } from "@/queries/event";
 import { useMapQuery } from "@/queries/map";
 import Layout from "@/components/EventLayout.vue";
@@ -8,13 +8,13 @@ import EventMap from "@/components/EventMap.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import objectform from "@/components/ObjectForm.vue";
 import { useStore } from "vuex";
-import router from "@/router";
 import { useUnitsQuery } from "@/queries/units";
-import type { UnitDto, UnitType } from "@/queries/units";
+import type { UnitDto } from "@/queries/units";
 import { supabase } from "@/lib/supabaseClient";
 
 const store = useStore();
 store.dispatch("notAuthenticatedToHome");
+
 const props = defineProps({
     id: {
         type: String,
@@ -35,18 +35,34 @@ const { data: unitsData, isLoading: unitsIsLoading, error: unitsError } = unitsQ
 
 const setMapLoaded = () => (mapLoaded.value = true);
 
+onMounted(() => {
+    if (toRaw(unitsData.value) && !toRaw(unitsIsLoading.value))
+        store.commit("setUnits", toRaw(unitsData.value));
+});
+
+watch([unitsData, unitsIsLoading, unitsError], () => {
+    if (toRaw(unitsData.value) && !toRaw(unitsIsLoading.value) && !toRaw(unitsError.value))
+        store.commit("setUnits", toRaw(unitsData.value));
+});
+
 supabase
     .channel(props.id)
     .on("postgres_changes", { event: "*", schema: "public", table: "units" }, payload => {
+        const currentUnits = toRaw(store.getters.getUnits) as UnitDto[];
         const newUnit = payload.new as UnitDto;
-        console.log(newUnit);
 
         if (payload.eventType === "INSERT") {
             // Add new unit to store
+            store.commit("setUnits", [...currentUnits, newUnit]);
         }
 
         if (payload.eventType === "UPDATE") {
             // Update unit in store
+            const updatedUnit = currentUnits.find((unit: UnitDto) => unit.id === newUnit.id);
+            if (updatedUnit) {
+                currentUnits[currentUnits.indexOf(updatedUnit)] = newUnit;
+                store.commit("setUnits", currentUnits);
+            }
         }
     })
     .subscribe();

@@ -61,8 +61,8 @@ const store = createStore({
             await router.push("/");
         },
         async eventCreate() {
-            let event = store.state.event;
-            let user = store.state.user;
+            const event = store.state.event;
+            const user = store.state.user;
             const { data, error } = await supabase.from("events").insert({
                 created_by: user.id,
                 name: event.name,
@@ -73,7 +73,7 @@ const store = createStore({
             await router.push("/events");
         },
         async eventUpdate() {
-            let event = store.state.event;
+            const event = store.state.event;
             const { data, error } = await supabase
                 .from("events")
                 .update({
