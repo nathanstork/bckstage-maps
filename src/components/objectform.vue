@@ -54,18 +54,21 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="(item, itemIndex) in filteredItems.slice().reverse()"
-                    :key="itemIndex"
-                    :style="{ backgroundColor: item.color }"
+                    v-for="(unit_type, unitIndex) in filteredUnits.slice().reverse()"
+                    :key="unitIndex"
+                    :style="{ backgroundColor: unit_type.color }"
                     class="text-center"
-                    @contextmenu.prevent="deleteItem(itemIndex, $event)"
+                    @contextmenu.prevent="deleteUnit(unitIndex, $event)"
                 >
-                    <td class="border-2 p-2 text-center" :style="{ backgroundColor: item.color }">
+                    <td
+                        class="border-2 p-2 text-center"
+                        :style="{ backgroundColor: unit_type.color }"
+                    >
                         <input
                             type="text"
-                            v-model="item.object"
+                            v-model="unit_type.object"
                             style="width: 100px; font-size: 15px; margin-left: 30px"
-                            @blur="updateItem(itemIndex, 'object')"
+                            @blur="updateUnit(unitIndex, 'object')"
                             class="text-center form-control"
                             disabled
                         />
@@ -78,21 +81,21 @@
         <button
             type="button"
             class="btn btn-ehbo"
-            @click="addItemWithColor('EHBO', '#FFA500', 'circle', props.event_id)"
+            @click="addUnitWithColor('EHBO', '#FFA500', 'circle', props.event_id)"
         >
             EHBO
         </button>
         <button
             type="button"
             class="btn btn-als"
-            @click="addItemWithColor('ALS', '#FF00DF', 'triangle', props.event_id)"
+            @click="addUnitWithColor('ALS', '#FF00DF', 'triangle', props.event_id)"
         >
             ALS
         </button>
         <button
             type="button"
             class="btn btn-ibt"
-            @click="addItemWithColor('IBT', '#00FFFF', 'square', props.event_id)"
+            @click="addUnitWithColor('IBT', '#00FFFF', 'square', props.event_id)"
         >
             IBT
         </button>
@@ -139,7 +142,7 @@
                     <button
                         class="btn btn-primary d-block mx-auto"
                         style="background-color: #0096ff; margin-top: 30px; padding: "
-                        @click="addItemWithCustomColor"
+                        @click="addUnitWithCustomColor"
                     >
                         Add
                     </button>
@@ -195,29 +198,29 @@ const newUnit = computed(() => {
     return store.state.newUnit;
 });
 
-const filteredItems = computed(() => {
-    return store.state.units.filter(item => {
-        return item.object.toLowerCase().includes(state.filterText.toLowerCase());
+const filteredUnits = computed(() => {
+    return store.state.units.filter(unit => {
+        return unit.object.toLowerCase().includes(state.filterText.toLowerCase());
     });
 });
 
-const filteredItemsArray = computed(() => {
-    return filteredItems.value.filter(item => {
-        return item.object.toLowerCase().includes(state.filterText.toLowerCase());
+const filteredUnitsArray = computed(() => {
+    return filteredUnits.value.filter(unit => {
+        return unit.object.toLowerCase().includes(state.filterText.toLowerCase());
     });
 });
 
-const addItemWithColor = (object, color, unitType, event_id) => {
+const addUnitWithColor = (object, color, unitType, event_id) => {
     const number = prompt("Please enter a number:");
     if (number !== null) {
-        const newItem = {
+        const newUnit = {
             object: object + " " + number,
             zone: "",
             color: color,
             id: Math.random().toString(36).substr(2, 9)
         };
 
-        store.state.units.push(newItem);
+        store.state.units.push(newUnit);
         state.filterText = "";
 
         createUnit.mutate(newUnit);
@@ -240,34 +243,34 @@ const createUnit = useMutation({
     }
 });
 
-const addItemWithCustomColor = () => {
+const addUnitWithCustomColor = () => {
     if (state.newObject.object !== "") {
-        const newItem = {
+        const newUnit = {
             object: state.newObject.object,
             zone: "",
             color: "#00ff77",
             id: Math.random().toString(36).substr(2, 9)
         };
 
-        store.state.units.push(newItem);
+        store.state.units.push(newUnit);
         state.newObject.object = "";
 
-        createUnit.mutate(newItem);
+        createUnit.mutate(newUnit);
     }
 };
 
-const deleteItem = (itemIndex, event) => {
+const deleteUnit = (unitIndex, event) => {
     event.preventDefault();
-    const itemToDelete = filteredItems.value.slice().reverse()[itemIndex];
-    const idToDelete = itemToDelete.id;
-    const indexToDelete = filteredItems.value.findIndex(item => item.id === idToDelete);
+    const unitToDelete = filteredUnits.value.slice().reverse()[unitIndex];
+    const idToDelete = unitToDelete.id;
+    const indexToDelete = filteredUnits.value.findIndex(unit => unit.id === idToDelete);
     if (indexToDelete >= 0) {
         if (
             confirm(
-                `Are you sure you want to delete "${filteredItems.value[indexToDelete].object}"?`
+                `Are you sure you want to delete "${filteredUnits.value[indexToDelete].object}"?`
             )
         ) {
-            filteredItems.value.splice(indexToDelete, 1);
+            filteredUnits.value.splice(indexToDelete, 1);
         }
     }
 };
@@ -283,8 +286,8 @@ const handleOutsideClick = event => {
 };
 const currentTime = new Date().toLocaleTimeString();
 
-const updateItem = (index, key) => {
-    filteredItems.value[index][key] = event.target.value;
+const updateUnit = (index, key) => {
+    filteredUnits.value[index][key] = event.target.value;
 };
 
 document.addEventListener("click", handleOutsideClick);
