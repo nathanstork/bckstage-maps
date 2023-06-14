@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, Ref, ref, toRaw, watch } from "vue";
-import { EventDto, useEventQuery } from "@/queries/event";
+import { useEventQuery } from "@/queries/event";
+import type { EventDto } from "@/queries/event";
 import { useMapQuery } from "@/queries/map";
 import Layout from "@/components/EventLayout.vue";
 import LoadingView from "@/views/LoadingView.vue";
