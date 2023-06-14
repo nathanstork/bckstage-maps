@@ -174,6 +174,11 @@ const state = reactive({
     popupVisible: false,
     popupInput: ""
 });
+const expandTable = () => {
+    state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
+    state.isTableExpanded = !state.isTableExpanded;
+    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi-eye";
+};
 
 const props = defineProps({
     event_id: {
@@ -209,12 +214,6 @@ const filteredItemsArray = computed(() => {
         return item.object.toLowerCase().includes(state.filterText.toLowerCase());
     });
 });
-
-const expandTable = () => {
-    state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
-    state.isTableExpanded = !state.isTableExpanded;
-    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi-eye";
-};
 
 const addItemWithColor = (object, color, unitType, event_id) => {
     const number = prompt("Please enter a number:");
