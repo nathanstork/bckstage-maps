@@ -175,7 +175,8 @@ const state = reactive({
     },
     filterText: "",
     popupVisible: false,
-    popupInput: ""
+    popupInput: "",
+    units: Array.from({ length: 12 }, () => ({ name: "", x: "", y: "", color: "" }))
 });
 const expandTable = () => {
     state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
@@ -263,14 +264,14 @@ const deleteUnit = (unitIndex, event) => {
     event.preventDefault();
     const unitToDelete = filteredUnits.value.slice().reverse()[unitIndex];
     const idToDelete = unitToDelete.id;
-    const indexToDelete = filteredUnits.value.findIndex(unit => unit.id === idToDelete);
+    const indexToDelete = store.state.units.findIndex(unit => unit.id === idToDelete);
     if (indexToDelete >= 0) {
         if (
             confirm(
                 `Are you sure you want to delete "${filteredUnits.value[indexToDelete].object}"?`
             )
         ) {
-            filteredUnits.value.splice(indexToDelete, 1);
+            store.state.units.splice(indexToDelete, 1);
         }
     }
 };
