@@ -190,14 +190,6 @@ const store = useStore();
 const queryClient = useQueryClient();
 
 console.log(props.event_id);
-const colorList = [
-    { name: "Blue", value: "#00FFFF" },
-    { name: "Orange", value: "#FFA500" },
-    { name: "Purple", value: "#F600FF" },
-    { name: "Green", value: "#00FF2B" },
-    { name: "Yellow", value: "#F7FF00" },
-    { name: "Red", value: "#FF0000" }
-];
 
 const newUnit = computed(() => {
     return store.state.newUnit;
