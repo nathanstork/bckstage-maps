@@ -49,26 +49,5 @@ const showLogoText = ref(false);
                 BckstageMaps
             </span>
         </a>
-
-        <button
-            class="btn #333333 btn-small px-2"
-            @click="
-                () => {
-                    showModal = true;
-                }
-            "
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
     </nav>
-    <DialogModal
-        :show="showModal"
-        title="Test"
-        body="Test"
-        :onCancel="
-            () => {
-                showModal = false;
-            }
-        "
-    />
 </template>
