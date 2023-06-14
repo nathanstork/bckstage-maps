@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, toRaw, watch } from "vue";
-import { useEventQuery } from "@/queries/event";
+import { onMounted, Ref, ref, toRaw, watch } from "vue";
+import { EventDto, useEventQuery } from "@/queries/event";
 import { useMapQuery } from "@/queries/map";
 import Layout from "@/components/EventLayout.vue";
 import LoadingView from "@/views/LoadingView.vue";
@@ -25,13 +25,19 @@ const props = defineProps({
 const mapLoaded = ref(false);
 
 const eventQuery = useEventQuery(props.id);
-const { data: eventData, isLoading: eventIsLoading, error: eventError } = eventQuery;
+const eventData = eventQuery.data as Ref<EventDto>;
+const eventIsLoading = eventQuery.isLoading as Ref<boolean>;
+const eventError = eventQuery.error as Ref<Error | null>;
 
 const mapQuery = useMapQuery(props.id);
-const { data: mapData, isLoading: mapIsLoading, error: mapError } = mapQuery;
+const mapData = mapQuery.data as Ref<string>;
+const mapIsLoading = mapQuery.isLoading as Ref<boolean>;
+const mapError = mapQuery.error as Ref<Error | null>;
 
 const unitsQuery = useUnitsQuery(props.id);
-const { data: unitsData, isLoading: unitsIsLoading, error: unitsError } = unitsQuery;
+const unitsData = unitsQuery.data as Ref<UnitDto[]>;
+const unitsIsLoading = unitsQuery.isLoading as Ref<boolean>;
+const unitsError = unitsQuery.error as Ref<Error | null>;
 
 const setMapLoaded = () => (mapLoaded.value = true);
 
