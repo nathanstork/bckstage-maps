@@ -37,7 +37,7 @@
             <input
                 class="form-control sticky-top"
                 style="width: 173px; background-color: lightgrey"
-                v-model="filterText"
+                v-model="state.filterText"
                 type="text"
                 placeholder="Filter by name..."
             />
@@ -77,7 +77,7 @@
             </tbody>
         </table>
     </div>
-    <div class="buttons" v-if="!state.isTableExpanded" style="margin-top: -70px">
+    <div class="buttons" v-if="!state.isTableExpanded" style="margin-top: -90px">
         <button
             type="button"
             class="btn btn-ehbo"
@@ -149,14 +149,14 @@
                 </div>
             </div>
         </div>
-        <div class="current-time">
-            <p style="font-size: 22px; font-weight: bold" color="white">{{ currentTime }}</p>
-        </div>
+    </div>
+    <div class="current-time">
+        <p style="font-size: 22px; font-weight: bold" color="white">{{ currentTime }}</p>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { computed, reactive, defineProps } from "vue";
 import { useStore } from "vuex";
 import { supabase } from "@/lib/supabaseClient";
@@ -185,7 +185,7 @@ const eyeIcon = computed(() => (state.isTableExpanded ? "bi-eye-slash" : "bi-eye
 
 const expandTable = () => {
     state.isTableExpanded = !state.isTableExpanded;
-    state.tableHeight = state.isTableExpanded ? "78vh" : "390px";
+    state.tableHeight = state.isTableExpanded ? "77vh" : "390px";
 };
 
 const props = defineProps({
@@ -283,7 +283,17 @@ const handleOutsideClick = event => {
         }
     }
 };
-const currentTime = new Date().toLocaleTimeString();
+const currentTime = ref(new Date().toLocaleTimeString());
+
+onMounted(() => {
+    const intervalId = setInterval(() => {
+        currentTime.value = new Date().toLocaleTimeString();
+    }, 1000);
+
+    onUnmounted(() => {
+        clearInterval(intervalId);
+    });
+});
 
 const updateUnit = (index, key) => {
     filteredUnits.value[index][key] = event.target.value;
@@ -331,11 +341,6 @@ body {
     color: white;
 }
 
-.buttons {
-    margin-top: 10px;
-    margin-left: 20px;
-}
-
 /* Easy Add Section*/
 .btn {
     width: 190px;
@@ -370,5 +375,15 @@ body {
 
 .collapse-up {
     transform: translateY(-118%);
+}
+
+.current-time {
+    position: fixed;
+    bottom: -10px;
+    right: 75px;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 3;
 }
 </style>
