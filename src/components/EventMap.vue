@@ -148,6 +148,7 @@ watch(lockMap, newValue => {
         id="panzoomContainer"
         class="overflow-hidden min-vw-80 min-vh-100 #333333"
         @contextmenu="onContextMenu"
+        style="margin-top: 20px"
     >
         <div ref="panzoomContent" class="d-inline-block">
             <VuePDF
