@@ -16,7 +16,7 @@ const showLogoText = ref(false);
 
 <template>
     <nav
-        class="navbar fixed-top navbar-dark flex justify-content-between #333333 shadow px-2"
+        class="navbar navbar-dark flex justify-content-between #333333 shadow px-2"
         style="z-index: 0"
     >
         <div class="container">

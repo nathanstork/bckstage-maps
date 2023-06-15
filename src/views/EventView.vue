@@ -15,7 +15,6 @@ import type { UnitDto } from "@/queries/units";
 import { supabase } from "@/lib/supabaseClient";
 
 const store = useStore();
-store.dispatch("notAuthenticatedToHome");
 
 const props = defineProps({
     id: {
@@ -96,6 +95,8 @@ supabase
                     :units="unitsData"
                     :onLoaded="setMapLoaded"
                 />
+            </div>
+            <div class="col-2">
                 <objectform :event_id="eventData.id" style="position: absolute"></objectform>
             </div>
         </div>
