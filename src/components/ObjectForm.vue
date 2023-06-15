@@ -15,18 +15,18 @@
                     <tr
                         v-for="(item, itemIndex) in filteredItems.slice().reverse()"
                         :key="itemIndex"
-                        :style="{ backgroundColor: item.color }"
+                        :style="{ 'background-color': checkUnitType(item.type) }"
                         class="text-center"
                         @contextmenu.prevent="deleteItem(itemIndex, $event)"
                         draggable="true"
                     >
                         <td
                             class="border-2 p-2 text-center"
-                            :style="{ backgroundColor: item.color }"
+                            :style="{ 'background-color': checkUnitType(item.type) }"
                         >
                             <input
                                 type="text"
-                                v-model="item.object"
+                                v-model="item.name"
                                 style="width: 150px; font-size: 15px"
                                 class="text-center form-control"
                                 disabled
@@ -98,7 +98,7 @@
                     <div class="mb-3">
                         <button
                             class="btn btn-primary d-block mx-auto"
-                            style="background-color: #0096ff; margin-top: 30px; padding: "
+                            style="background-color: #0096ff; margin-top: 30px"
                             @click="addItemWithCustomColor"
                         >
                             Add
@@ -141,14 +141,21 @@ const props = defineProps({
 const store = useStore();
 const queryClient = useQueryClient();
 
-const colorList = [
-    { name: "Blue", value: "#00FFFF" },
-    { name: "Orange", value: "#FFA500" },
-    { name: "Purple", value: "#F600FF" },
-    { name: "Green", value: "#00FF2B" },
-    { name: "Yellow", value: "#F7FF00" },
-    { name: "Red", value: "#FF0000" }
-];
+function checkUnitType(unitType) {
+    console.log(unitType);
+    switch (unitType) {
+        case "circle":
+            return "#FFA500";
+        case "square":
+            return "#00FFFF";
+        case "triangle":
+            return "#FF00DF";
+        case "polygon":
+            return "#00FF2B";
+        default:
+            return ""; // Return a default value if needed
+    }
+}
 
 const newUnit = computed(() => {
     return store.state.newUnit;
@@ -197,17 +204,13 @@ const createUnit = useMutation({
 });
 
 const addItemWithCustomColor = () => {
-    if (state.newObject.object !== "" && state.newObject.color !== "") {
-        const newItem = {
-            object: state.newObject.object,
-            zone: "",
-            color: state.newObject.color,
-            id: Math.random().toString(36).substr(2, 9)
-        };
-        // items.push(newItem);
-        state.newObject.object = "";
-        state.newObject.color = "";
-    }
+    // if (state.newObject.object !== "" && state.newObject.color !== "") {
+    //   newUnit.name = state.newObject.object;
+    //   newUnit.event_id = event_id;
+    //   newUnit.unit_type = 'polygon';
+    //
+    //   createUnit.mutate(newUnit);
+    // }
 };
 
 const deleteItem = (itemIndex, event) => {
