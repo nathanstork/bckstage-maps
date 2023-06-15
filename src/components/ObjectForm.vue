@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, defineProps } from "vue";
+import { computed, reactive, defineProps, onUnmounted } from "vue";
 import { useStore } from "vuex";
 import { supabase } from "@/lib/supabaseClient";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
@@ -225,8 +225,8 @@ const createUnit = useMutation({
             event_id: newUnit.event_id,
             name: newUnit.name,
             type: newUnit.unit_type,
-            x: "A",
-            y: 1
+            x: 20,
+            y: -260
         });
     },
     onSuccess: () => {
@@ -275,22 +275,22 @@ const handleOutsideClick = event => {
 //     items[index][key] = event.target.value;
 // };
 
-    document.addEventListener("click", handleOutsideClick);
+document.addEventListener("click", handleOutsideClick);
 
-    onUnmounted(() => {
-        clearInterval(intervalId);
-        document.removeEventListener("click", handleOutsideClick);
-    });
+onUnmounted(() => {
+    // clearInterval(intervalId);
+    document.removeEventListener("click", handleOutsideClick);
 });
+
 const handleKeyPress = event => {
     if (event.key === "Enter") {
-        addUnitWithCustomColor();
+        addItemWithCustomColor();
     }
 };
 
-const updateUnit = (index, key) => {
-    filteredUnits.value[index][key] = event.target.value;
-};
+// const updateUnit = (index, key) => {
+//     filteredUnits.value[index][key] = event.target.value;
+// };
 
 document.addEventListener("click", handleOutsideClick);
 document.removeEventListener("click", handleOutsideClick);
