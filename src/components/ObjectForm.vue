@@ -290,10 +290,18 @@ onMounted(() => {
         currentTime.value = new Date().toLocaleTimeString();
     }, 1000);
 
+    document.addEventListener("click", handleOutsideClick);
+
     onUnmounted(() => {
         clearInterval(intervalId);
+        document.removeEventListener("click", handleOutsideClick);
     });
 });
+const handleKeyPress = event => {
+    if (event.key === "Enter") {
+        addUnitWithCustomColor();
+    }
+};
 
 const updateUnit = (index, key) => {
     filteredUnits.value[index][key] = event.target.value;
