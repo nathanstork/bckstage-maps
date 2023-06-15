@@ -3,14 +3,6 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <button
-        v-if="isLoggedIn"
-        @click.prevent="signOut()"
-        class="btn btn-outline-primary"
-        style="margin: 10px 0px 0px 10px; width: 140px; z-index: 5"
-    >
-        Log out
-    </button>
     <main>
         <router-view />
     </main>
@@ -33,23 +25,10 @@ export default {
     setup() {
         const store = useStore();
 
-        const signOut = () => {
-            store.dispatch("signOutAction");
-        };
-
         onMounted(async () => {
             const { data, error } = await supabase.auth.refreshSession();
-            // store.commit("setUser", data.user);
+            store.commit("setUser", data.user);
         });
-
-        const isLoggedIn = () => {
-            return store.getters.getUser !== null;
-        };
-
-        return {
-            signOut,
-            isLoggedIn
-        };
     }
 };
 </script>

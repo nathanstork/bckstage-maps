@@ -1,10 +1,12 @@
 <script setup>
 import { useEventsQuery } from "@/queries/events";
-import { computed, toRaw, watch } from "vue";
+import { computed, reactive, ref, toRaw, watch } from "vue";
 import { supabase } from "@/lib/supabaseClient";
 import router from "@/router";
 import { useQueryClient, useMutation } from "@tanstack/vue-query";
 import { useStore } from "vuex";
+import LogOut from "@/components/LogOut.vue";
+import DialogModal from "@/components/DialogModal.vue";
 
 const store = useStore();
 store.dispatch("notAuthenticatedToHome");
@@ -15,6 +17,7 @@ const user = computed(() => {
 const events = computed(() => {
     return store.state.events;
 });
+const showModal = ref(false);
 
 watch([data, error, isLoading], newValue => {
     store.state.events = toRaw(newValue[0]["data"]);
@@ -35,11 +38,11 @@ const orderedEvents = computed(() => {
 });
 
 // mutation
-async function DeleteEvent(eventId) {
-    const { data, error } = await supabase.from("events").delete().match({ id: eventId });
-    store.state.events = data;
-    useEventsQuery();
-}
+// async function DeleteEvent(eventId) {
+//   const {data, error} = await supabase.from("events").delete().match({id: eventId});
+//   store.state.events = data;
+//   useEventsQuery();
+// }
 
 function GoToEvent(id) {
     router.push("event/" + id);
@@ -65,7 +68,7 @@ const mutation = useMutation({
     }
 });
 
-function onButtonClick(id) {
+function EventDelete(id) {
     mutation.mutate(id);
 }
 
@@ -93,8 +96,11 @@ function getDotClass(event) {
 </script>
 
 <template>
-    <div class="container pt-5">
-        <div class="d-flex justify-content-between">
+    <div class="container">
+        <div class="d-flex">
+            <LogOut />
+        </div>
+        <div class="d-flex justify-content-between pt-5">
             <div class="col-3">
                 <h1 class="text-2xl font-semibold" style="margin-left: 95px">Events</h1>
             </div>
@@ -144,7 +150,7 @@ function getDotClass(event) {
                                     </button>
                                     <button
                                         style="margin-left: 5px"
-                                        @click.prevent="onButtonClick(event.id)"
+                                        @click.prevent="EventDelete(event.id)"
                                         class="btn btn-outline-primary"
                                     >
                                         Delete
