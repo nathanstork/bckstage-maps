@@ -1,5 +1,5 @@
 <template>
-    <div class="objectzone mt-5">
+    <div class="objectzone">
         <button type="button" class="eyeopen" @click="expandTable">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,12 +32,12 @@
             </svg>
         </button>
     </div>
-    <div class="table-container" :style="{ height: tableHeight }">
+    <div class="table-container" :style="{ height: state.tableHeight }">
         <div class="sticky-top">
             <input
                 class="form-control sticky-top"
                 style="width: 173px; background-color: lightgrey"
-                v-model="filterText"
+                v-model="state.filterText"
                 type="text"
                 placeholder="Filter by name..."
             />
@@ -54,19 +54,21 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="(item, itemIndex) in filteredItems.slice().reverse()"
-                    :key="itemIndex"
-                    :style="{ backgroundColor: item.color }"
+                    v-for="(unit_type, unitIndex) in filteredUnits.slice().reverse()"
+                    :key="unitIndex"
+                    :style="{ backgroundColor: unit_type.color }"
                     class="text-center"
-                    @contextmenu.prevent="deleteItem(itemIndex, $event)"
-                    draggable="true"
+                    @contextmenu.prevent="deleteUnit(unitIndex, $event)"
                 >
-                    <td class="border-2 p-2 text-center" :style="{ backgroundColor: item.color }">
+                    <td
+                        class="border-2 p-2 text-center"
+                        :style="{ backgroundColor: unit_type.color }"
+                    >
                         <input
                             type="text"
-                            v-model="item.object"
+                            v-model="unit_type.object"
                             style="width: 100px; font-size: 15px; margin-left: 30px"
-                            @blur="updateItem(itemIndex, 'object')"
+                            @blur="updateUnit(unitIndex, 'object')"
                             class="text-center form-control"
                             disabled
                         />
@@ -75,28 +77,25 @@
             </tbody>
         </table>
     </div>
-    <div class="current-time">
-        <p style="font-size: 22px; font-weight: bold">{{ currentTime }}</p>
-    </div>
-    <div class="buttons" v-if="!isTableExpanded" style="margin-top: -70px">
+    <div class="buttons" v-if="!state.isTableExpanded" style="margin-top: -90px">
         <button
             type="button"
             class="btn btn-ehbo"
-            @click="addItemWithColor('EHBO', '#FFA500', 'circle', props.event_id)"
+            @click="addUnitWithColor('EHBO', '#FFA500', 'circle', props.event_id)"
         >
             EHBO
         </button>
         <button
             type="button"
             class="btn btn-als"
-            @click="addItemWithColor('ALS', '#FF00DF', 'triangle', props.event_id)"
+            @click="addUnitWithColor('ALS', '#FF00DF', 'triangle', props.event_id)"
         >
             ALS
         </button>
         <button
             type="button"
             class="btn btn-ibt"
-            @click="addItemWithColor('IBT', '#00FFFF', 'square', props.event_id)"
+            @click="addUnitWithColor('IBT', '#00FFFF', 'square', props.event_id)"
         >
             IBT
         </button>
@@ -113,7 +112,12 @@
         <div class="collapse collapse-up" id="customscreen" ref="customscreen">
             <div class="customscreen bg-dark text-light" ref="customscreen">
                 <div class="mb-3">
-                    <label for="object-input" class="form-label">Object:</label>
+                    <label
+                        for="object-input"
+                        class="form-label"
+                        style="font-size: 20px; margin-top: 5px"
+                        >Object:</label
+                    >
                     <input
                         class="form-control"
                         type="text"
@@ -138,7 +142,7 @@
                     <button
                         class="btn btn-primary d-block mx-auto"
                         style="background-color: #0096ff; margin-top: 30px; padding: "
-                        @click="addItemWithCustomColor"
+                        @click="addUnitWithCustomColor"
                     >
                         Add
                     </button>
@@ -146,9 +150,13 @@
             </div>
         </div>
     </div>
+    <div class="current-time">
+        <p style="font-size: 22px; font-weight: bold" color="white">{{ currentTime }}</p>
+    </div>
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from "vue";
 import { computed, reactive, defineProps } from "vue";
 import { useStore } from "vuex";
 import { supabase } from "@/lib/supabaseClient";
@@ -167,8 +175,18 @@ const state = reactive({
     },
     filterText: "",
     popupVisible: false,
-    popupInput: ""
+    popupInput: "",
+    units: Array.from({ length: 12 }, () => ({ name: "", x: "", y: "", color: "" }))
 });
+
+state.isTableExpanded = false;
+
+const eyeIcon = computed(() => (state.isTableExpanded ? "bi-eye-slash" : "bi-eye"));
+
+const expandTable = () => {
+    state.isTableExpanded = !state.isTableExpanded;
+    state.tableHeight = state.isTableExpanded ? "77vh" : "390px";
+};
 
 const props = defineProps({
     event_id: {
@@ -179,41 +197,30 @@ const props = defineProps({
 const store = useStore();
 const queryClient = useQueryClient();
 
-const colorList = [
-    { name: "Blue", value: "#00FFFF" },
-    { name: "Orange", value: "#FFA500" },
-    { name: "Purple", value: "#F600FF" },
-    { name: "Green", value: "#00FF2B" },
-    { name: "Yellow", value: "#F7FF00" },
-    { name: "Red", value: "#FF0000" }
-];
+console.log(props.event_id);
 
 const newUnit = computed(() => {
     return store.state.newUnit;
 });
 
-const filteredItems = computed(() => {
-    return store.state.units;
+const filteredUnits = computed(() => {
+    return store.state.units.filter(unit => {
+        return unit.object.toLowerCase().includes(state.filterText.toLowerCase());
+    });
 });
 
-// const filteredItems = computed(() => {
-//     return items.filter(item => {
-//         return item.object.toLowerCase().includes(state.filterText.toLowerCase());
-//     });
-// });
-
-const expandTable = () => {
-    state.tableHeight = state.isTableExpanded ? "390px" : "80vh";
-    state.isTableExpanded = !state.isTableExpanded;
-    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi bi-eye";
-};
-
-const addItemWithColor = (object, color, unitType, event_id) => {
+const addUnitWithColor = (object, color, unitType, event_id) => {
     const number = prompt("Please enter a number:");
     if (number !== null) {
-        newUnit.name = object + " " + number;
-        newUnit.event_id = event_id;
-        newUnit.unit_type = unitType;
+        const newUnit = {
+            object: object + " " + number,
+            zone: "",
+            color: color,
+            id: Math.random().toString(36).substr(2, 9)
+        };
+
+        store.state.units.push(newUnit);
+        state.filterText = "";
 
         createUnit.mutate(newUnit);
     }
@@ -235,28 +242,34 @@ const createUnit = useMutation({
     }
 });
 
-const addItemWithCustomColor = () => {
-    if (state.newObject.object !== "" && state.newObject.color !== "") {
-        const newItem = {
+const addUnitWithCustomColor = () => {
+    if (state.newObject.object !== "") {
+        const newUnit = {
             object: state.newObject.object,
             zone: "",
-            color: state.newObject.color,
+            color: "#00ff77",
             id: Math.random().toString(36).substr(2, 9)
         };
-        // items.push(newItem);
+
+        store.state.units.push(newUnit);
         state.newObject.object = "";
-        state.newObject.color = "";
+
+        createUnit.mutate(newUnit);
     }
 };
 
-const deleteItem = (itemIndex, event) => {
+const deleteUnit = (unitIndex, event) => {
     event.preventDefault();
-    const itemToDelete = filteredItems.value.slice().reverse()[itemIndex];
-    const idToDelete = itemToDelete.id;
-    const indexToDelete = items.findIndex(item => item.id === idToDelete);
+    const unitToDelete = filteredUnits.value.slice().reverse()[unitIndex];
+    const idToDelete = unitToDelete.id;
+    const indexToDelete = store.state.units.findIndex(unit => unit.id === idToDelete);
     if (indexToDelete >= 0) {
-        if (confirm(`Are you sure you want to delete "${items[indexToDelete].object}"?`)) {
-            items.splice(indexToDelete, 1);
+        if (
+            confirm(
+                `Are you sure you want to delete "${filteredUnits.value[indexToDelete].object}"?`
+            )
+        ) {
+            store.state.units.splice(indexToDelete, 1);
         }
     }
 };
@@ -270,10 +283,21 @@ const handleOutsideClick = event => {
         }
     }
 };
+const currentTime = ref(new Date().toLocaleTimeString());
 
-// const updateItem = (index, key) => {
-//     items[index][key] = event.target.value;
-// };
+onMounted(() => {
+    const intervalId = setInterval(() => {
+        currentTime.value = new Date().toLocaleTimeString();
+    }, 1000);
+
+    onUnmounted(() => {
+        clearInterval(intervalId);
+    });
+});
+
+const updateUnit = (index, key) => {
+    filteredUnits.value[index][key] = event.target.value;
+};
 
 document.addEventListener("click", handleOutsideClick);
 document.removeEventListener("click", handleOutsideClick);
@@ -288,6 +312,7 @@ body {
 
 .table-container {
     width: 188px;
+    height: 360px;
     overflow-y: scroll;
     overflow-x: hidden;
     margin-left: 30px;
@@ -302,6 +327,7 @@ body {
 .eyeopen {
     margin-left: 187px;
     cursor: pointer;
+    margin-top: 20px;
 }
 
 .form-control {
@@ -316,19 +342,13 @@ body {
     color: white;
 }
 
-.buttons {
-    margin-top: 10px;
-    margin-left: 20px;
-}
-
 /* Easy Add Section*/
-/*.btn {
+.btn {
     width: 190px;
     margin-bottom: 5px;
-    margin-left: 10px;
-}*/
+}
 
-.btn-ambu {
+.btn-ehbo {
     background-color: #ffa500;
 }
 
@@ -345,7 +365,7 @@ body {
 }
 
 .customscreen {
-    width: 190px;
+    width: 191px;
     height: 250px;
     margin-left: 10px;
 }
@@ -356,5 +376,15 @@ body {
 
 .collapse-up {
     transform: translateY(-118%);
+}
+
+.current-time {
+    position: fixed;
+    bottom: -10px;
+    right: 75px;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 3;
 }
 </style>
