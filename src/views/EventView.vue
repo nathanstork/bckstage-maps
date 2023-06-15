@@ -66,11 +66,9 @@ supabase
 
         if (payload.eventType === "UPDATE") {
             // Update unit in store
-            const updatedUnit = currentUnits.find((unit: UnitDto) => unit.id === newUnit.id);
-            if (updatedUnit) {
-                currentUnits[currentUnits.indexOf(updatedUnit)] = newUnit;
-                store.commit("setUnits", currentUnits);
-            }
+            const updatedUnits = currentUnits.filter((unit: UnitDto) => unit.id !== newUnit.id);
+            updatedUnits.push(newUnit);
+            store.commit("setUnits", updatedUnits);
         }
     })
     .subscribe();
@@ -87,16 +85,16 @@ supabase
         v-if="!eventIsLoading && eventData && !(eventError || mapError)"
         :title="eventData.name"
     >
-        <div class="row" style="margin-top: 15px">
+        <div class="row">
             <div class="col-10">
                 <LoadingView v-if="!eventData || !mapLoaded" />
                 <EventMap
                     v-if="!mapIsLoading && mapData"
                     :map="mapData"
-                    :units="unitsData"
+                    :units="store.getters.getUnits"
                     :onLoaded="setMapLoaded"
                 />
-                <objectform :event_id="eventData.id" style="position: absolute"></objectform>
+                <objectform :event_id="eventData.id" style="position: absolute" />
             </div>
         </div>
     </Layout>
