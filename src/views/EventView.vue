@@ -87,12 +87,15 @@ supabase
         v-if="!eventIsLoading && eventData && !(eventError || mapError)"
         :title="eventData.name"
     >
-        <div class="row">
+        <div class="row" style="margin-top: 15px">
             <div class="col-10">
                 <LoadingView v-if="!eventData || !mapLoaded" />
-                <EventMap v-if="!mapIsLoading && mapData" :map="mapData" :onLoaded="setMapLoaded" />
-            </div>
-            <div class="col-2">
+                <EventMap
+                    v-if="!mapIsLoading && mapData"
+                    :map="mapData"
+                    :units="unitsData"
+                    :onLoaded="setMapLoaded"
+                />
                 <objectform :event_id="eventData.id" style="position: absolute"></objectform>
             </div>
         </div>
