@@ -1,6 +1,6 @@
 <template>
     {{ user }}
-    <div class="container-fluid" style="margin-top: -48px">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-7 bg-primary">
                 <div class="headtext">
