@@ -1,6 +1,46 @@
 <template>
     <div class="wrapper">
-        <div class="table-container" :style="isTableExpanded ? 'height: 190px' : 'height: 70vh'">
+        <button type="button" class="eyeopen" @click="expandTable">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="currentColor"
+                class="bi bi-eye-slash-fill"
+                viewBox="0 0 16 16"
+            >
+                <path
+                    v-if="eyeIcon === 'bi bi-eye'"
+                    d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"
+                />
+                <path
+                    d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"
+                />
+
+                <path
+                    v-if="eyeIcon === 'bi-eye-slash'"
+                    d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"
+                />
+                <path
+                    v-else
+                    d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0.0 0 2.829 2.829z"
+                />
+                <path
+                    v-else
+                    d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"
+                />
+            </svg>
+        </button>
+        <div class="sticky-top">
+            <input
+                class="form-control sticky-top"
+                style="width: 188px; margin-left: 30px; background-color: lightgrey"
+                v-model="state.filterText"
+                type="text"
+                placeholder="Filter by name..."
+            />
+        </div>
+        <div class="table-container" :style="{ height: state.tableHeight }">
             <table class="table table-bordered table-striped">
                 <thead class="sticky-top" style="background-color: #333333">
                     <tr class="text-center">
@@ -17,7 +57,7 @@
                         :key="itemIndex"
                         :style="{ 'background-color': checkUnitType(item.type) }"
                         class="text-center"
-                        @contextmenu.prevent="deleteItem(itemIndex, $event)"
+                        @contextmenu.prevent="deleteUnit(itemIndex, $event)"
                         draggable="true"
                     >
                         <td
@@ -36,10 +76,7 @@
                 </tbody>
             </table>
         </div>
-        <!--    <div class="current-time">-->
-        <!--        <p style="font-size: 22px; font-weight: bold">{{ currentTime }}</p>-->
-        <!--    </div>-->
-        <div class="buttons" v-if="!isTableExpanded" style="margin-top: -70px">
+        <div class="buttons" v-if="!state.isTableExpanded" style="margin-top: -90px">
             <button
                 type="button"
                 class="btn btn-ehbo"
@@ -74,7 +111,7 @@
             <div class="collapse collapse-up" id="customscreen" ref="customscreen">
                 <div class="customscreen bg-dark text-light" ref="customscreen">
                     <div class="mb-3">
-                        <label for="object-input" class="form-label">Object:</label>
+                        <label for="object-input" class="form-label">Unit:</label>
                         <input
                             class="form-control"
                             type="text"
@@ -108,16 +145,19 @@
             </div>
         </div>
     </div>
+    <div class="current-time">
+        <p style="font-size: 22px; font-weight: bold; color: white">{{ state.currentTime }}</p>
+    </div>
 </template>
 
 <script setup>
-import { computed, reactive, defineProps, onUnmounted } from "vue";
+import { computed, reactive, defineProps, onUnmounted, onMounted } from "vue";
 import { useStore } from "vuex";
 import { supabase } from "@/lib/supabaseClient";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 
 const state = reactive({
-    tableHeight: "300px",
+    tableHeight: "355px",
     isTableExpanded: false,
     showMenu: null,
     showCustomScreen: false,
@@ -129,7 +169,8 @@ const state = reactive({
     },
     filterText: "",
     popupVisible: false,
-    popupInput: ""
+    popupInput: "",
+    currentTime: ""
 });
 
 const props = defineProps({
@@ -162,18 +203,18 @@ const newUnit = computed(() => {
 });
 
 const filteredItems = computed(() => {
-    return store.state.units;
+    return store.state.units.filter(item => {
+        return item.name.toLowerCase().includes(state.filterText.toLowerCase());
+    });
 });
 
-// const filteredItems = computed(() => {
-//     return items.filter(item => {
-//         return item.object.toLowerCase().includes(state.filterText.toLowerCase());
-//     });
-// });
+state.isTableExpanded = false;
+
+const eyeIcon = computed(() => (state.isTableExpanded ? "bi-eye-slash" : "bi-eye"));
 
 const expandTable = () => {
     state.isTableExpanded = !state.isTableExpanded;
-    state.eyeIcon = state.isTableExpanded ? "bi-eye-slash" : "bi bi-eye";
+    state.tableHeight = state.isTableExpanded ? "72vh" : "355px";
 };
 
 const addItemWithColor = (object, color, unitType, event_id) => {
@@ -182,6 +223,18 @@ const addItemWithColor = (object, color, unitType, event_id) => {
         newUnit.name = object + " " + number;
         newUnit.event_id = event_id;
         newUnit.unit_type = unitType;
+
+        createUnit.mutate(newUnit);
+    }
+};
+
+const addItemWithCustomColor = () => {
+    if (state.newObject.object !== "") {
+        const newUnit = {
+            name: state.newObject.object,
+            event_id: props.event_id,
+            unit_type: "polygon"
+        };
 
         createUnit.mutate(newUnit);
     }
@@ -203,26 +256,19 @@ const createUnit = useMutation({
     }
 });
 
-const addItemWithCustomColor = () => {
-    // if (state.newObject.object !== "" && state.newObject.color !== "") {
-    //   newUnit.name = state.newObject.object;
-    //   newUnit.event_id = event_id;
-    //   newUnit.unit_type = 'polygon';
-    //
-    //   createUnit.mutate(newUnit);
-    // }
-};
-
-const deleteItem = (itemIndex, event) => {
-    // event.preventDefault();
-    // const itemToDelete = filteredItems.value.slice().reverse()[itemIndex];
-    // const idToDelete = itemToDelete.id;
-    // const indexToDelete = items.findIndex(item => item.id === idToDelete);
-    // if (indexToDelete >= 0) {
-    //     if (confirm(`Are you sure you want to delete "${items[indexToDelete].object}"?`)) {
-    //         items.splice(indexToDelete, 1);
-    //     }
-    // }
+const deleteUnit = async (unitIndex, event) => {
+    event.preventDefault();
+    const unitToDelete = filteredItems.value.slice().reverse()[unitIndex];
+    const idToDelete = unitToDelete.id;
+    const indexToDelete = store.state.units.findIndex(unit => unit.id === idToDelete);
+    if (indexToDelete >= 0) {
+        if (
+            confirm(`Are you sure you want to delete "${filteredItems.value[indexToDelete].name}"?`)
+        ) {
+            store.state.units = store.state.units.filter(unit => unit.id !== idToDelete);
+            await supabase.from("units").delete().eq("id", idToDelete);
+        }
+    }
 };
 
 const handleOutsideClick = event => {
@@ -241,8 +287,18 @@ const handleOutsideClick = event => {
 
 document.addEventListener("click", handleOutsideClick);
 
+onMounted(() => {
+    const intervalId = setInterval(() => {
+        state.currentTime = new Date().toLocaleTimeString();
+    }, 1000);
+
+    onUnmounted(() => {
+        clearInterval(intervalId);
+    });
+});
+
 onUnmounted(() => {
-    // clearInterval(intervalId);
+    clearInterval(intervalId);
     document.removeEventListener("click", handleOutsideClick);
 });
 
@@ -273,6 +329,7 @@ body {
     overflow-x: hidden;
     font-size: 20px;
     transition: height 0.2s ease-out;
+    margin-left: 30px;
 }
 
 .table-container.full-height {
@@ -280,8 +337,9 @@ body {
 }
 
 .eyeopen {
-    margin-left: 157px;
+    margin-left: 187px;
     cursor: pointer;
+    margin-top: 5px;
 }
 
 .form-control {
@@ -296,17 +354,11 @@ body {
     color: white;
 }
 
-.buttons {
-    margin-top: 10px;
-    margin-left: 20px;
-}
-
 /* Easy Add Section*/
-/*.btn {
-    width: 190px;
+.btn {
+    width: 189px;
     margin-bottom: 5px;
-    margin-left: 10px;
-}*/
+}
 
 .btn-ehbo {
     background-color: #ffa500;
@@ -325,7 +377,7 @@ body {
 }
 
 .customscreen {
-    width: 190px;
+    width: 192px;
     height: 250px;
     margin-left: 10px;
 }
@@ -336,5 +388,15 @@ body {
 
 .collapse-up {
     transform: translateY(-118%);
+}
+
+.current-time {
+    position: fixed;
+    bottom: -10px;
+    right: 75px;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 3;
 }
 </style>
