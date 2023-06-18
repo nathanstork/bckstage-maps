@@ -23,6 +23,11 @@ const props = defineProps({
         type: Function,
         required: false,
         default: () => {}
+    },
+    onReset: {
+        type: Function,
+        required: false,
+        default: () => {}
     }
 });
 
@@ -54,46 +59,15 @@ const contextMenuItems: ContextMenuItem[] = [
     {
         text: "Center map",
         onClick: () => {
-            console.log("Center map"); // TODO: Implement map centering
-
-            //const panzoomContent.value?.getBoundingClientRect();
-
-            /*var w; // width of the parent
-            var h; // height of the parent
-            var left = 0;
-            var top = 0;
-            var sceneBoundingBox = getBoundingBox();
-            if (sceneBoundingBox) {
-                // If we have bounding box - use it.
-                left = sceneBoundingBox.left;
-                top = sceneBoundingBox.top;
-                w = sceneBoundingBox.right - sceneBoundingBox.left;
-                h = sceneBoundingBox.bottom - sceneBoundingBox.top;
-            } else {
-                // otherwise just use whatever space we have
-                var ownerRect = owner.getBoundingClientRect();
-                w = ownerRect.width;
-                h = ownerRect.height;
-            }
-            var bbox = panController.getBBox();
-            if (bbox.width === 0 || bbox.height === 0) {
-                // we probably do not have any elements in the SVG
-                // just bail out;
-                return;
-            }
-            var dh = h / bbox.height;
-            var dw = w / bbox.width;
-            var scale = Math.min(dw, dh);
-            transform.x = -(bbox.left + bbox.width / 2) * scale + w / 2 + left;
-            transform.y = -(bbox.top + bbox.height / 2) * scale + h / 2 + top;
-            transform.scale = scale;*/
+            componentKey.value++; // Unmount and remount component by changing the key
         },
-        disabled: true
+        disabled: false
     },
     contextMenuLockItem.value,
     {
         text: "Reset map",
         onClick: () => {
+            if (props.onReset) props.onReset();
             componentKey.value++; // Unmount and remount component by changing the key
         }
     }
