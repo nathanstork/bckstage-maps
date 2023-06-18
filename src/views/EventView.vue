@@ -43,7 +43,18 @@ const unitsError = unitsQuery.error as Ref<Error | null>;
 
 const setMapLoaded = () => (mapLoaded.value = true);
 
-onMounted(() => {
+const resetMap = async () => {
+    // Enable loading state
+    mapLoaded.value = false;
+
+    // Refetch queries
+    await eventQuery.refetch();
+    await mapQuery.refetch();
+    await unitsQuery.refetch();
+
+    // Disable loading state
+    setMapLoaded();
+};
     if (toRaw(unitsData.value) && !toRaw(unitsIsLoading.value))
         store.commit("setUnits", toRaw(unitsData.value));
 });
@@ -93,6 +104,7 @@ supabase
                     :map="mapData"
                     :units="store.getters.getUnits"
                     :onLoaded="setMapLoaded"
+                    :onReset="resetMap"
                 />
                 <objectform :event_id="eventData.id" style="position: absolute" />
             </div>
