@@ -1,56 +1,3 @@
-<template>
-    <div>
-        <div
-            ref="movableTarget"
-            :class="
-                'position-absolute' &&
-                ((props.unit?.type === UnitType.CIRCLE && 'rounded-circle') ||
-                    (props.unit?.type === UnitType.SQUARE && 'square') ||
-                    (props.unit?.type === UnitType.TRIANGLE && 'triangle-shape') ||
-                    (props.unit?.type === UnitType.POLYGON && 'polygon-shape'))
-            "
-            :style="{
-                transform: 'translate(' + x + 'px, ' + y + 'px)',
-                width: props.unit?.type === UnitType.TRIANGLE ? '0' : '1.5rem',
-                height: props.unit?.type === UnitType.TRIANGLE ? '0' : '1.5rem',
-                borderLeft:
-                    props.unit?.type === UnitType.TRIANGLE ? '0.75rem solid transparent' : 'none',
-                borderRight:
-                    props.unit?.type === UnitType.TRIANGLE ? '0.75rem solid transparent' : 'none',
-                borderBottom:
-                    props.unit?.type === UnitType.TRIANGLE ? '1.5rem solid #FF00DF' : 'none',
-                zIndex: 100,
-                backgroundColor:
-                    (props.unit?.type === UnitType.CIRCLE && '#FFA500') ||
-                    (props.unit?.type === UnitType.SQUARE && '#00FFFF') ||
-                    (props.unit?.type === UnitType.POLYGON && '#00FF77') ||
-                    ''
-            }"
-            @mouseover="showTooltip = true"
-            @mouseout="showTooltip = false"
-        >
-            <div
-                v-if="showTooltip"
-                style="width: 100px; top: -20px; color: black; font-weight: bold"
-            >
-                {{ props.unit.name }}
-            </div>
-        </div>
-        <Moveable
-            :target="movableTarget"
-            :draggable="true"
-            :stopPropagation="true"
-            @drag="
-                e => {
-                    e.target.style.transform = e.transform;
-                    x = e.translate[0];
-                    y = e.translate[1];
-                }
-            "
-        />
-    </div>
-</template>
-
 <script setup lang="ts">
 import { UnitType } from "@/queries/units";
 import type { UnitDto } from "@/queries/units";
@@ -106,8 +53,69 @@ setInterval(() => {
     });
 }, 2000);
 
-const showTooltip = ref(false); // Add reactive variable to control tooltip visibility
+const showTooltip = ref(false);
 </script>
+
+<template>
+    <div>
+        <div
+            ref="movableTarget"
+            :class="
+                'position-absolute' &&
+                ((props.unit?.type === UnitType.CIRCLE && 'rounded-circle') ||
+                    (props.unit?.type === UnitType.SQUARE && 'square') ||
+                    (props.unit?.type === UnitType.TRIANGLE && 'triangle-shape') ||
+                    (props.unit?.type === UnitType.POLYGON && 'polygon-shape'))
+            "
+            :style="{
+                transform: 'translate(' + x + 'px, ' + y + 'px)',
+                width: props.unit?.type === UnitType.TRIANGLE ? '0' : '1.5rem',
+                height: props.unit?.type === UnitType.TRIANGLE ? '0' : '1.5rem',
+                borderLeft:
+                    props.unit?.type === UnitType.TRIANGLE ? '0.75rem solid transparent' : 'none',
+                borderRight:
+                    props.unit?.type === UnitType.TRIANGLE ? '0.75rem solid transparent' : 'none',
+                borderBottom:
+                    props.unit?.type === UnitType.TRIANGLE ? '1.5rem solid #FF00DF' : 'none',
+                zIndex: 100,
+                backgroundColor:
+                    (props.unit?.type === UnitType.CIRCLE && '#FFA500') ||
+                    (props.unit?.type === UnitType.SQUARE && '#00FFFF') ||
+                    (props.unit?.type === UnitType.POLYGON && '#00FF77') ||
+                    ''
+            }"
+            @mouseover="showTooltip = true"
+            @mouseout="showTooltip = false"
+        >
+            <div
+                v-if="showTooltip"
+                style="
+                    width: 70px;
+                    top: -29px;
+                    color: white;
+                    font-weight: bold;
+                    background-color: black;
+                    padding: 2px;
+                    border-radius: 5px;
+                "
+            >
+                {{ props.unit.name }}
+            </div>
+        </div>
+        <Moveable
+            :target="movableTarget"
+            :draggable="true"
+            :stopPropagation="true"
+            @drag="
+                e => {
+                    e.target.style.transform = e.transform;
+                    x = e.translate[0];
+                    y = e.translate[1];
+                }
+            "
+        />
+    </div>
+</template>
 
 <style>
 .polygon-shape {
