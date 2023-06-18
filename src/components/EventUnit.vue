@@ -1,8 +1,61 @@
+<template>
+    <div>
+        <div
+            ref="movableTarget"
+            :class="
+                'position-absolute' &&
+                ((props.unit?.type === UnitType.CIRCLE && 'rounded-circle') ||
+                    (props.unit?.type === UnitType.SQUARE && 'square') ||
+                    (props.unit?.type === UnitType.TRIANGLE && 'triangle-shape') ||
+                    (props.unit?.type === UnitType.POLYGON && 'polygon-shape'))
+            "
+            :style="{
+                transform: 'translate(' + x + 'px, ' + y + 'px)',
+                width: props.unit?.type === UnitType.TRIANGLE ? '0' : '1.5rem',
+                height: props.unit?.type === UnitType.TRIANGLE ? '0' : '1.5rem',
+                borderLeft:
+                    props.unit?.type === UnitType.TRIANGLE ? '0.75rem solid transparent' : 'none',
+                borderRight:
+                    props.unit?.type === UnitType.TRIANGLE ? '0.75rem solid transparent' : 'none',
+                borderBottom:
+                    props.unit?.type === UnitType.TRIANGLE ? '1.5rem solid #FF00DF' : 'none',
+                zIndex: 100,
+                backgroundColor:
+                    (props.unit?.type === UnitType.CIRCLE && '#FFA500') ||
+                    (props.unit?.type === UnitType.SQUARE && '#00FFFF') ||
+                    (props.unit?.type === UnitType.POLYGON && '#00FF77') ||
+                    ''
+            }"
+            @mouseover="showTooltip = true"
+            @mouseout="showTooltip = false"
+        >
+            <div
+                v-if="showTooltip"
+                style="width: 100px; top: -20px; color: black; font-weight: bold"
+            >
+                {{ props.unit.name }}
+            </div>
+        </div>
+        <Moveable
+            :target="movableTarget"
+            :draggable="true"
+            :stopPropagation="true"
+            @drag="
+                e => {
+                    e.target.style.transform = e.transform;
+                    x = e.translate[0];
+                    y = e.translate[1];
+                }
+            "
+        />
+    </div>
+</template>
+
 <script setup lang="ts">
 import { UnitType } from "@/queries/units";
 import type { UnitDto } from "@/queries/units";
 import Moveable from "vue3-moveable";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import type { PropType } from "vue";
 import { useUnitMutation } from "@/mutations/unit";
 
@@ -52,52 +105,13 @@ setInterval(() => {
         y: update.y
     });
 }, 2000);
+
+const showTooltip = ref(false); // Add reactive variable to control tooltip visibility
 </script>
 
-<template>
-    <div>
-        <div
-            ref="movableTarget"
-            :class="
-                'position-absolute' &&
-                ((props.unit?.type === UnitType.CIRCLE && 'rounded-circle bg-danger') ||
-                    (props.unit?.type === UnitType.SQUARE && 'rounded-circle bg-info') ||
-                    (props.unit?.type === UnitType.TRIANGLE && 'rounded-circle bg-success') ||
-                    (props.unit?.type === UnitType.POLYGON && 'rounded-circle bg-primary'))
-            "
-            :style="{
-                transform: 'translate(' + x + 'px, ' + y + 'px)',
-                width: '2rem',
-                height: '2rem',
-                zIndex: 100
-            }"
-        />
-        <Moveable
-            :target="movableTarget"
-            :draggable="true"
-            :stopPropagation="true"
-            @drag="
-                e => {
-                    e.target.style.transform = e.transform;
-                    x = e.translate[0];
-                    y = e.translate[1];
-                }
-            "
-        />
-    </div>
-</template>
-
 <style>
-.unit {
-    position: absolute;
-    top: 150px;
-    left: 100px;
-    line-height: 100px;
-    text-align: center;
-    background: #ee8;
-    color: #333;
-    font-weight: bold;
-    border: 1px solid #333;
-    box-sizing: border-box;
+.polygon-shape {
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    background-color: #00ff77;
 }
 </style>
