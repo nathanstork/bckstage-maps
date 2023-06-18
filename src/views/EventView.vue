@@ -77,9 +77,9 @@ supabase
 
         if (payload.eventType === "UPDATE") {
             // Update unit in store
-            const updatedUnits = currentUnits.filter((unit: UnitDto) => unit.id !== newUnit.id);
-            updatedUnits.push(newUnit);
-            store.commit("setUnits", updatedUnits);
+            const updatedUnit = currentUnits.filter((unit: UnitDto) => unit.id === newUnit.id)[0];
+            currentUnits[currentUnits.indexOf(updatedUnit)] = newUnit;
+            store.commit("setUnits", currentUnits);
         }
     })
     .subscribe();
